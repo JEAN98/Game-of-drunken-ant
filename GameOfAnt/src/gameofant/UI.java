@@ -7,6 +7,7 @@ package gameofant;
 
 import javax.swing.JLabel; import javax.swing.BorderFactory;
  import java.awt.Color;
+import java.awt.Label;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
@@ -14,6 +15,10 @@ public class UI extends javax.swing.JFrame {
     //1 In logicM1 is meant of Current position of Ant
     //2 In logicM1 is meant of end position of matrix
     //0 In logicM1 is meant of The cell is empty
+    //5 In logicM1 is meant of sugar 
+    //10 In logicM1 is meant of sugar with wine
+    //15 In logicM1 is meant of sugar with poison
+
     //Key Up 38;    //Key left  37;     //Key Right 39;    // Key Down 40;
     
     JLabel [][] uiMatrix;
@@ -23,8 +28,8 @@ public class UI extends javax.swing.JFrame {
     int life;
     int large;
     int width;
-    int currentRow;
-    int currentColumn;
+    int passRow=200; //We must to save the previous Column, due to the ant can´t to previous cell
+    int passColumn=700;//We must to save the previous row, due to the ant can´t to previous cell
   
     javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
     
@@ -38,11 +43,10 @@ public class UI extends javax.swing.JFrame {
         life = 100;
         large = large1;
         width = width1;
-        currentColumn = 0;
-        currentRow = 0;
+      
         creationOfMatrix();
         creationOfLogicMatrix();
-    }
+    }   JLabel fin = new JLabel();
 
  
     @SuppressWarnings("unchecked")
@@ -73,7 +77,7 @@ public class UI extends javax.swing.JFrame {
 
         jLabel2.setText("jLabel2");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(1060, 20, 60, 20);
+        jLabel2.setBounds(940, 20, 60, 20);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -104,77 +108,105 @@ public class UI extends javax.swing.JFrame {
        //minimum of widh is 2 and 2of large
        //Maximiun of width is 8 and 8 of large
 
-        int x=125;//Large
-        int y = 76; //width
+        int x=45;//Large
+        int y = 50; //width
              
            for (int i = 0; i < uiMatrix.length; i++) {            
                for (int k = 0; k < uiMatrix[i].length; k++) {
                    
                    uiMatrix[i][k] = new JLabel();
                    uiMatrix[i][k].setBorder(border);                  
-                   uiMatrix[i][k].setBounds(x,y,125,76);
+                   uiMatrix[i][k].setBounds(x,y,45,50);
                    
                    if (i == 0 && k == 0) {
                        //First space
-                       uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/ImageFirst.jpg")));
+                       uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                        
-                   } /*else if (i == uiMatrix.length - 1 && k == uiMatrix[i].length - 1) {
-                       //End space
-                       uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FinalTest.jpg")));
-                   } */
+                   } 
                    
                    else {
                        //The rest of the others space
                        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
                    }
-                 
                    uiMatrix[i][k].setText("");                
                    add(uiMatrix[i][k],null); //Adding from code a jframe
                   
-                   x+=110;
+                   x+=45;
+                   
+                   if (i == uiMatrix.length - 1 && k == uiMatrix[i].length - 1) {
+                       //End space
+                       //uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FinalTest.jpg")));
+                    
+                       fin.setBounds(x,y,45+52,50+19);
+                      
+                       fin.setBorder(border); 
+                       fin.setVisible(false);
+                       fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
+                       add(fin);
+                   } 
+                 
+                   
                }
-               x=125;
-               y += 76;
+            x = 45;
+            y += 50;
         }
     }
-    private void creationOfLogicMatrix(){
+
+    private void creationOfLogicMatrix() {
         for (int i = 0; i < logicM1.length; i++) {
             for (int k = 0; k < logicM1[i].length; k++) {
-                
+
                 if (i == 0 && k == 0) {
                     logicM1[i][k] = 1; //Current position of Ant( image of Ant)
                 } else if (i == uiMatrix.length - 1 && k == uiMatrix[i].length - 1) {
-                     logicM1[i][k] = 2; //End cell  (Image of colony)
+                    logicM1[i][k] = 2; //End cell  (Image of colony)
                     //End space
-                }               
-                else{
-                    logicM1[i][k]=0;
+                } else {
+                    logicM1[i][k] = 0;
                 }
-               
+
             }
         }
     }
-    
-    public void moveRight(){
-         for (int i = 0; i < uiMatrix.length; i++) {
+
+    public void moveRight() {
+        for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
+                //Verify the current Position
                 if (logicM1[i][k] == 1) {
-                    if (i == logicM1.length-1 && k+1 == logicM1[i].length -1 ) {
-                        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                        uiMatrix[i][k+1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FinalTest.jpg")));
-                        JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        if (k + 1 < logicM1[i].length) {
-                            logicM1[i][k + 1] = 1;//New current position
-                            logicM1[i][k] = 0; //Empty position
-                            uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/ImageFirst.jpg")));
+                    //Verify previous cell
+
+                    //Verify if the next cell is the end
+                    if (i == logicM1.length - 1 && k + 1 == logicM1[i].length - 1) {
+                        //Verify previous cell
+                        if (i != passRow || k + 1 != passColumn) {
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                            return;
+                            uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
+                            fin.setVisible(true);
+                            steps++; //Quantity of steps increased
+                            JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
+                            jLabel2.setText(String.valueOf(steps));
                         } else {
-                            JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } else {
+                        //Verify if ant can move right
+                        if (k + 1 < logicM1[i].length) {
+                            if (i != passRow || k + 1 != passColumn) {
+                                logicM1[i][k + 1] = 1;//New current position
+                                logicM1[i][k] = 0; //Empty position
+                                uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
+                                uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                                passRow = i;//save the previous row
+                                passColumn = k; //save the previous column 
+                                steps++; //Quantity of steps increased
+                                return;
+                            } else {
+                                JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
+                            }
+
                         }
                     }
-
                 }
             }
         }
@@ -182,74 +214,102 @@ public class UI extends javax.swing.JFrame {
     public void moveLeft(){
           for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
+                 //Verify the current Position
                 if (logicM1[i][k] == 1) {
-               
-                      if (k - 1 >= 0) {
-                          logicM1[i][k - 1] = 1;//New current position
-                          logicM1[i][k] = 0; //Empty position
-                          uiMatrix[i][k - 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/ImageFirst.jpg")));
-                          uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                          return;
-                      } else {
-                          JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
-                      }
-
-                  }
-              }
-        }
-    }
-    public void moveUp(){
-        for (int i = 0; i < uiMatrix.length; i++) {
-            for (int k = 0; k < uiMatrix[i].length; k++) {
-                   if(logicM1[i][k] == 1){
-                       
-                       if( i-1 >= 0){
-                           logicM1[i-1][k]=1;//New current position
-                           logicM1[i][k] = 0; //Empty position
-                           uiMatrix[i-1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/ImageFirst.jpg")));
-                           uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                         return;
-                       }
-                       else{
-                             JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps" , JOptionPane.INFORMATION_MESSAGE);
-                       }
-                   }
-            }
-        }
-    }
-    public void moveDown(){
-        for (int i = 0; i < uiMatrix.length; i++) {
-            for (int k = 0; k < uiMatrix[i].length; k++) {
-                if (logicM1[i][k] == 1) {
-                    if (i +1 == logicM1.length -1 && k == logicM1[i].length-1) {
-                          uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                          uiMatrix[i+1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FinalTest.jpg")));
-                          
-                        JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        if (i + 1 < uiMatrix.length) {
-                            logicM1[i + 1][k] = 1;//New current position
+                    //Verify if can move left
+                    if (k - 1 >= 0) {
+                         //Verify the previous cell
+                        if (i != passRow || k - 1 != passColumn) {
+                            logicM1[i][k - 1] = 1;//New current position
                             logicM1[i][k] = 0; //Empty position
-                            uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/ImageFirst.jpg")));
+                            uiMatrix[i][k - 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                            passRow = i;//save the previous row
+                            passColumn = k; //save the previous column 
+                            steps++; //Quantity of steps increased
                             return;
-                        } 
-                        else {
-                            JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
                         }
+                    } //Can't move
+                    else {
+                        JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
                     }
 
                 }
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
+    public void moveUp(){
+        for (int i = 0; i < uiMatrix.length; i++) {
+            for (int k = 0; k < uiMatrix[i].length; k++) {
+                //Verify the current Position
+                if (logicM1[i][k] == 1) {
+
+                    //Verify if can move up
+                    if (i - 1 >= 0) {
+                        if (i - 1 != passRow || k != passColumn) {
+                            logicM1[i - 1][k] = 1;//New current position
+                            logicM1[i][k] = 0; //Empty position
+                            uiMatrix[i - 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
+                            uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                            passRow = i;//save the previous row
+                            passColumn = k; //save the previous column 
+                            steps++; //Quantity of steps increased
+                            return;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                    } //Can't move up, for this we are going to show a message
+                    else {
+                        JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        }
+    }
+
+    public void moveDown() {
+        for (int i = 0; i < uiMatrix.length; i++) {
+            for (int k = 0; k < uiMatrix[i].length; k++) {
+                //Verify the current Position
+                if (logicM1[i][k] == 1) {
+                    //Verify is the end postion
+                    if (i + 1 == logicM1.length - 1 && k == logicM1[i].length - 1) {
+                        //Verify the pass row and pass column
+                        if (i + 1 != passRow || k != passColumn) {
+                            uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                            uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
+                            fin.setVisible(true);
+                            steps++; //Quantity of steps increased
+                            JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
+                            jLabel2.setText(String.valueOf(steps));
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                    } else {
+                        //Verify if the ant can move
+                        if (i + 1 < uiMatrix.length) {
+                            logicM1[i + 1][k] = 1;//New current position
+                            logicM1[i][k] = 0; //Empty position
+                            uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
+                            uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                            passRow = i;//save the previous row
+                            passColumn = k; //save the previous column 
+                            steps++; //Quantity of steps increased
+                            return;
+                        } //The ant can´t move
+                        
+                    }
+
+                }
+            }
+        }
+    }
+
+
     
     
     
