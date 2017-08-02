@@ -6,10 +6,10 @@ import javax.swing.JFrame;
 
 public class GameOfAnt {
 
-  
+   static GameSettingsModel model = new GameSettingsModel("Jean", 13, 18, 5);
     public static void main(String[] args) {
         //
-        UI newView = new UI(48,48); //13 * 18 maximun
+        UI newView = new UI(model); //13 * 18 maximun
         newView.show(true);
         newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        

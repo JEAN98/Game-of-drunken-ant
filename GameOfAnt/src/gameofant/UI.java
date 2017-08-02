@@ -12,8 +12,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 public class UI extends javax.swing.JFrame {
-    //1 In logicM1 is meant of Current position of Ant
-    //2 In logicM1 is meant of end position of matrix
+    //-1 In logicM1 is meant of Current position of Ant
+    //-2 In logicM1 is meant of end position of matrix
     //0 In logicM1 is meant of The cell is empty
     //5 In logicM1 is meant of sugar 
     //10 In logicM1 is meant of sugar with wine
@@ -23,27 +23,18 @@ public class UI extends javax.swing.JFrame {
     
     JLabel [][] uiMatrix;
     int [][] logicM1;
-    int steps;
-    int alcholemiaLevel;
-    int life;
-    int large;
-    int width;
+    GameSettingsModel gameSettings;
     int passRow=200; //We must to save the previous Column, due to the ant can´t to previous cell
     int passColumn=700;//We must to save the previous row, due to the ant can´t to previous cell
   
     javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
     
-    public UI(int large1,int width1) {
+    public UI(GameSettingsModel model) {
         initComponents();
       
-        uiMatrix = new JLabel[large1][width1];
-        logicM1 = new int[large1][width1];
-        steps = 0;
-        alcholemiaLevel = 0;
-        life = 100;
-        large = large1;
-        width = width1;
-      
+        uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
+        logicM1 = new int[model.getLarge()][model.getWidth()];
+        gameSettings = model;
         creationOfMatrix();
         creationOfLogicMatrix();
     }   JLabel fin = new JLabel();
@@ -151,15 +142,19 @@ public class UI extends javax.swing.JFrame {
             y += 50;
         }
     }
+    private int randomRow(){
+        return (int) (Math.random() * gameSettings.getLarge());
+        
+    }
 
     private void creationOfLogicMatrix() {
         for (int i = 0; i < logicM1.length; i++) {
             for (int k = 0; k < logicM1[i].length; k++) {
 
                 if (i == 0 && k == 0) {
-                    logicM1[i][k] = 1; //Current position of Ant( image of Ant)
+                    logicM1[i][k] = -1; //Current position of Ant( image of Ant)
                 } else if (i == uiMatrix.length - 1 && k == uiMatrix[i].length - 1) {
-                    logicM1[i][k] = 2; //End cell  (Image of colony)
+                    logicM1[i][k] = -2; //End cell  (Image of colony)
                     //End space
                 } else {
                     logicM1[i][k] = 0;
@@ -173,33 +168,33 @@ public class UI extends javax.swing.JFrame {
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                 //Verify the current Position
-                if (logicM1[i][k] == 1) {
+                if (logicM1[i][k] == -1) {
                     //Verify previous cell
 
                     //Verify if the next cell is the end
                     if (i == logicM1.length - 1 && k + 1 == logicM1[i].length - 1) {
                         //Verify previous cell
-                        if (i != passRow || k + 1 != passColumn) {
+                        if (i != gameSettings.getPassRow() || k + 1 != gameSettings.getPassColumn()) {
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
                             uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             fin.setVisible(true);
-                            steps++; //Quantity of steps increased
+                            gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
-                            jLabel2.setText(String.valueOf(steps));
+                            jLabel2.setText(String.valueOf(gameSettings.getStepsQuantityMade()));
                         } else {
                             JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } else {
                         //Verify if ant can move right
                         if (k + 1 < logicM1[i].length) {
-                            if (i != passRow || k + 1 != passColumn) {
-                                logicM1[i][k + 1] = 1;//New current position
+                            if (i != gameSettings.getPassRow() || k + 1 != gameSettings.getPassColumn()) {
+                                logicM1[i][k + 1] = -1;//New current position
                                 logicM1[i][k] = 0; //Empty position
                                 uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                                 uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                                passRow = i;//save the previous row
-                                passColumn = k; //save the previous column 
-                                steps++; //Quantity of steps increased
+                                gameSettings.setPassRow(i);//save the previous row
+                                gameSettings.setPassColumn(k); //save the previous column 
+                                gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                                 return;
                             } else {
                                 JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
@@ -215,18 +210,18 @@ public class UI extends javax.swing.JFrame {
           for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                  //Verify the current Position
-                if (logicM1[i][k] == 1) {
+                if (logicM1[i][k] == -1) {
                     //Verify if can move left
                     if (k - 1 >= 0) {
                          //Verify the previous cell
-                        if (i != passRow || k - 1 != passColumn) {
-                            logicM1[i][k - 1] = 1;//New current position
+                        if (gameSettings.getPassRow() != i || k - 1 != gameSettings.getPassColumn()) {
+                            logicM1[i][k - 1] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i][k - 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                            passRow = i;//save the previous row
-                            passColumn = k; //save the previous column 
-                            steps++; //Quantity of steps increased
+                            gameSettings.setPassRow(i);//save the previous row
+                            gameSettings.setPassColumn(k); //save the previous column
+                            gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             return;
                         } else {
                             JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
@@ -244,18 +239,18 @@ public class UI extends javax.swing.JFrame {
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                 //Verify the current Position
-                if (logicM1[i][k] == 1) {
+                if (logicM1[i][k] == -1) {
 
                     //Verify if can move up
                     if (i - 1 >= 0) {
-                        if (i - 1 != passRow || k != passColumn) {
-                            logicM1[i - 1][k] = 1;//New current position
+                        if (i - 1 != gameSettings.getPassRow() || k != gameSettings.getPassColumn()) {
+                            logicM1[i - 1][k] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i - 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                            passRow = i;//save the previous row
-                            passColumn = k; //save the previous column 
-                            steps++; //Quantity of steps increased
+                            gameSettings.setPassRow(i);//save the previous row
+                            gameSettings.setPassColumn(k); //save the previous column
+                            gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             return;
                         } else {
                             JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
@@ -274,17 +269,17 @@ public class UI extends javax.swing.JFrame {
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                 //Verify the current Position
-                if (logicM1[i][k] == 1) {
+                if (logicM1[i][k] == -1) {
                     //Verify is the end postion
                     if (i + 1 == logicM1.length - 1 && k == logicM1[i].length - 1) {
                         //Verify the pass row and pass column
-                        if (i + 1 != passRow || k != passColumn) {
+                        if (i + 1 != gameSettings.getPassRow() || k != gameSettings.getPassColumn()) {
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
                             uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             fin.setVisible(true);
-                            steps++; //Quantity of steps increased
+                            gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
-                            jLabel2.setText(String.valueOf(steps));
+                            jLabel2.setText(String.valueOf(gameSettings.getStepsQuantityMade()));
                         } else {
                             JOptionPane.showMessageDialog(null, "Fuera de rango", "Upps", JOptionPane.INFORMATION_MESSAGE);
                         }
@@ -292,13 +287,13 @@ public class UI extends javax.swing.JFrame {
                     } else {
                         //Verify if the ant can move
                         if (i + 1 < uiMatrix.length) {
-                            logicM1[i + 1][k] = 1;//New current position
+                            logicM1[i + 1][k] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                            passRow = i;//save the previous row
-                            passColumn = k; //save the previous column 
-                            steps++; //Quantity of steps increased
+                            gameSettings.setPassRow(i);//save the previous row
+                            gameSettings.setPassColumn(k); //save the previous column
+                            gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             return;
                         } //The ant can´t move
                         
@@ -340,7 +335,7 @@ public class UI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UI(0,0).setVisible(true);
+                new UI(null).setVisible(true);
             }
         });
     }
