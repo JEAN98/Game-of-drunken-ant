@@ -1,7 +1,10 @@
-
 package gameofant;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class GameSettingsModel {
+
     private String nickName;
     private int large;
     private int width;
@@ -15,6 +18,8 @@ public class GameSettingsModel {
     private int currentColumn;
     private int passRow;
     private int passColumn;
+    private ArrayList<Integer> rowHistory;
+    private ArrayList<Integer> columnHistory;
 
     public GameSettingsModel(String nickName, int large, int width, int obstacleQuantity) {
         this.nickName = nickName;
@@ -22,7 +27,7 @@ public class GameSettingsModel {
         this.width = width;
         this.life = 100;
         this.obstacleQuantity = obstacleQuantity;
-        this.stepsQuantityMade=0;
+        this.stepsQuantityMade = 0;
         this.betterScore = 0;
         this.alcoholismLevel = 0;
         this.sugarLevel = 0;
@@ -30,6 +35,8 @@ public class GameSettingsModel {
         this.currentRow = 0;
         this.passRow = -100;
         this.passColumn = -100;
+        this.rowHistory = new ArrayList<>();
+        this.columnHistory = new ArrayList<>();
     }
 
     public String getNickName() {
@@ -63,7 +70,6 @@ public class GameSettingsModel {
     public void setLife(int life) {
         this.life = life;
     }
-    
 
     public int getObstacleQuantity() {
         return obstacleQuantity;
@@ -136,7 +142,22 @@ public class GameSettingsModel {
     public void setPassColumn(int passColumn) {
         this.passColumn = passColumn;
     }
-    
-    
-}
 
+    public ArrayList<Integer> getRowHistory() {
+        return rowHistory;
+    }
+
+    public void setRowHistory(int rowHistory) {
+        this.rowHistory.add(rowHistory);
+    }
+
+    public ArrayList<Integer> getColumnHistory() {
+        return columnHistory;
+    }
+
+    public void setColumnHistory(int columnHistory) {
+        this.columnHistory.add(columnHistory);
+    }
+
+
+}
