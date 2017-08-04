@@ -10,8 +10,9 @@ public class GameOfAnt {
     public static void main(String[] args) {
         //
         UI newView = new UI(model); //13 * 18 maximun
-        newView.show(true);
+        newView.setVisible(true);
         newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
        
     }
     

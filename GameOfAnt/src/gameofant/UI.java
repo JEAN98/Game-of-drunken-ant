@@ -68,8 +68,7 @@ public class UI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(14, 98, 81));
-        setForeground(new java.awt.Color(14, 98, 81));
+        setMinimumSize(new java.awt.Dimension(1370, 840));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -79,7 +78,7 @@ public class UI extends javax.swing.JFrame {
 
         jLabel2.setText("jLabel2");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(1170, 0, 150, 70);
+        jLabel2.setBounds(940, 20, 60, 20);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -121,7 +120,12 @@ public class UI extends javax.swing.JFrame {
        ImageIcon fond = new ImageIcon(new ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg")).getImage());
          
    }
-    
+   
+   private void saveCurrentCell(int i, int k){
+       gameSettings.setCurrentRow(i);
+       gameSettings.setCurrentColumn(k);
+   }
+   
     private void saveStepsHistory(int i, int k){
        //Here we can save the steps by ant
        gameSettings.setRowHistory(i);
@@ -198,16 +202,33 @@ public class UI extends javax.swing.JFrame {
                 } 
                 //In this part we are going to insert the obstacles
                 else {
-                  
+                 logicM1[i][k] = 0;
                 }
-
             }
         }
+        setObstacles();
+        System.out.println("Ready");
     }
+    
+    private int  verifyObstacles(int i,int k){
+        
+        if(logicM1[i][k] == 5){
+            return 5;
+        }
+        if(logicM1[i][k] == 10)
+        {
+            return 10;
+        }
+        if(logicM1[i][k] == 15){
+            return 15;
+        }
+        return 0;
+    }
+    
     private void setObstacles(){
         int cont = 0;
-        int i = (int) (Math.random() * gameSettings.getWidth());;
-        int k = (int) (Math.random() * gameSettings.getLarge());
+        int i = (int) (Math.random() * gameSettings.getLarge()-1);;
+        int k = (int) (Math.random() * gameSettings.getWidth()-1);
         while(cont <= gameSettings.getObstacleQuantity()*3){
                 
                 while(logicM1[i][k] != 0 ){
@@ -272,6 +293,7 @@ public class UI extends javax.swing.JFrame {
                                 gameSettings.setPassColumn(k); //save the previous column 
                                 gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                                 saveStepsHistory(i, k);
+                                saveCurrentCell(i, k+1);
                                 return;
                             } else {
                                  //JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
@@ -301,6 +323,7 @@ public class UI extends javax.swing.JFrame {
                             gameSettings.setPassColumn(k); //save the previous column
                             gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             saveStepsHistory(i, k);
+                            saveCurrentCell(i, k-1);
                             return;
                         } else {
                             //JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
@@ -332,6 +355,7 @@ public class UI extends javax.swing.JFrame {
                             gameSettings.setPassColumn(k); //save the previous column
                             gameSettings.setStepsQuantityMade(gameSettings.getStepsQuantityMade()+1); //Quantity of steps increased
                             saveStepsHistory(i, k);
+                            saveCurrentCell(i-1, k);
                             return;
                         } else {
                            //JOptionPane.showMessageDialog(null, "This cell was your previous cell", "One more time!", JOptionPane.INFORMATION_MESSAGE);
@@ -365,6 +389,8 @@ public class UI extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
                             jLabel2.setText(String.valueOf(gameSettings.getStepsQuantityMade()));
                             saveStepsHistory(i, k);
+                            saveCurrentCell(i+1, k);
+                            return;
 
                     } else {
                         //Verify if the ant can move
