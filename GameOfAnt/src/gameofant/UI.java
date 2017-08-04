@@ -11,6 +11,9 @@ import java.awt.Label;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import java.applet.AudioClip;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 
 public class UI extends javax.swing.JFrame {
@@ -26,12 +29,16 @@ public class UI extends javax.swing.JFrame {
     JLabel [][] uiMatrix;
     int [][] logicM1;
     GameSettingsModel gameSettings;
+
     int sugarCont = 0;
     int sugarWineCont = 0;
+    int possionContn = 0;
+    ArrayList<Integer> randomRows;
  
     javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
     
     public UI(GameSettingsModel model) {
+        this.randomRows = new ArrayList();
         initComponents();
         uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
         logicM1 = new int[model.getLarge()][model.getWidth()];
@@ -61,6 +68,8 @@ public class UI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(14, 98, 81));
+        setForeground(new java.awt.Color(14, 98, 81));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -70,7 +79,7 @@ public class UI extends javax.swing.JFrame {
 
         jLabel2.setText("jLabel2");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(940, 20, 60, 20);
+        jLabel2.setBounds(1170, 0, 150, 70);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -91,7 +100,29 @@ public class UI extends javax.swing.JFrame {
        else if(evt.getKeyCode() == 38)
            moveUp(); //key up pressed
     }//GEN-LAST:event_formKeyPressed
-   private void saveStepsHistory(int i, int k){
+   private void showStepsHistory(){
+       //Here we can show the stepts that ant made  
+      int cont = 0;
+   
+      while(cont < gameSettings.getRowHistory().size()){
+          uiMatrix[getRowsHistory(cont)][getColumnHistory(cont)].setText("used");  
+          cont++;
+      }
+   }
+   private int getRowsHistory(int i){
+       return gameSettings.getRowHistory().get(i);
+   }
+   private int getColumnHistory(int k){
+       return gameSettings.getColumnHistory().get(k);
+   } 
+   
+   private void showGarden(){
+      
+       ImageIcon fond = new ImageIcon(new ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg")).getImage());
+         
+   }
+    
+    private void saveStepsHistory(int i, int k){
        //Here we can save the steps by ant
        gameSettings.setRowHistory(i);
        gameSettings.setColumnHistory(k);
@@ -140,16 +171,17 @@ public class UI extends javax.swing.JFrame {
                        fin.setBorder(border); 
                        fin.setVisible(false);
                        fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
-                       add(fin);
+                       add(fin,null);
                    } 
-                 
+                  
                    
                }
             x = 45;
             y += 50;
         }
     }
-    private int randomRow(){
+
+    private int randomRowSugar(){
         return (int) (Math.random() * gameSettings.getLarge());
         
     }
@@ -163,11 +195,46 @@ public class UI extends javax.swing.JFrame {
                 } else if (i == uiMatrix.length - 1 && k == uiMatrix[i].length - 1) {
                     logicM1[i][k] = -2; //End cell  (Image of colony)
                     //End space
-                } else {
-                    logicM1[i][k] = 0;
+                } 
+                //In this part we are going to insert the obstacles
+                else {
+                  
                 }
 
             }
+        }
+    }
+    private void setObstacles(){
+        int cont = 0;
+        int i = (int) (Math.random() * gameSettings.getWidth());;
+        int k = (int) (Math.random() * gameSettings.getLarge());
+        while(cont <= gameSettings.getObstacleQuantity()*3){
+                
+                while(logicM1[i][k] != 0 ){
+                    i = (int) (Math.random() * gameSettings.getWidth());
+                    k = (int) (Math.random() * gameSettings.getLarge());
+                }
+                logicM1[i][k] = 5;
+                sugarCont++;
+                cont++;
+                
+                
+                while (logicM1[i][k] != 0) {
+                    i = (int) (Math.random() * gameSettings.getWidth());
+                    k = (int) (Math.random() * gameSettings.getLarge());
+                }
+                logicM1[i][k] = 10;
+                sugarWineCont++;
+                cont++;
+           
+           
+                while (logicM1[i][k] != 0) {
+                    i = (int) (Math.random() * gameSettings.getWidth());
+                    k = (int) (Math.random() * gameSettings.getLarge());
+                }
+                logicM1[i][k] = 15;
+                possionContn++;
+                cont++; 
         }
     }
 
