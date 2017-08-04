@@ -210,30 +210,36 @@ public class UI extends javax.swing.JFrame {
         System.out.println("Ready");
     }
     
-    private int  verifyObstacles(int i,int k){
+    private void  verifyObstacles(int i,int k){
         
         if(logicM1[i][k] == 5){
-            return 5;
+           JOptionPane.showMessageDialog(null, "Very good", "Sugar", JOptionPane.INFORMATION_MESSAGE);
+           // return 5;
         }
         if(logicM1[i][k] == 10)
         {
-            return 10;
+           JOptionPane.showMessageDialog(null, "Bad", "Sugar with alchol", JOptionPane.INFORMATION_MESSAGE);
+           // return 10;
         }
         if(logicM1[i][k] == 15){
-            return 15;
+         JOptionPane.showMessageDialog(null, "Bad", "Possion!!", JOptionPane.INFORMATION_MESSAGE);
+           // return 5;
         }
-        return 0;
+       // return 0;
     }
     
     private void setObstacles(){
         int cont = 0;
         int i = (int) (Math.random() * gameSettings.getLarge()-1);;
         int k = (int) (Math.random() * gameSettings.getWidth()-1);
-        while(cont <= gameSettings.getObstacleQuantity()*3){
+        int obstaclesQuantity = 0;
+        obstaclesQuantity = (int)gameSettings.getObstacleQuantity()*3;
+        
+        while(cont < obstaclesQuantity){
                 
                 while(logicM1[i][k] != 0 ){
-                    i = (int) (Math.random() * gameSettings.getWidth());
-                    k = (int) (Math.random() * gameSettings.getLarge());
+                    i = (int) (Math.random() * (gameSettings.getWidth()-1));
+                    k = (int) (Math.random() * (gameSettings.getLarge()-1));
                 }
                 logicM1[i][k] = 5;
                 sugarCont++;
@@ -241,8 +247,8 @@ public class UI extends javax.swing.JFrame {
                 
                 
                 while (logicM1[i][k] != 0) {
-                    i = (int) (Math.random() * gameSettings.getWidth());
-                    k = (int) (Math.random() * gameSettings.getLarge());
+                    i = (int) (Math.random() * (gameSettings.getWidth()-1));
+                    k = (int) (Math.random() * (gameSettings.getLarge()-1));
                 }
                 logicM1[i][k] = 10;
                 sugarWineCont++;
@@ -250,8 +256,8 @@ public class UI extends javax.swing.JFrame {
            
            
                 while (logicM1[i][k] != 0) {
-                    i = (int) (Math.random() * gameSettings.getWidth());
-                    k = (int) (Math.random() * gameSettings.getLarge());
+                    i = (int) (Math.random() * (gameSettings.getWidth()-1));
+                    k = (int) (Math.random() * (gameSettings.getWidth()-1));
                 }
                 logicM1[i][k] = 15;
                 possionContn++;
@@ -270,6 +276,7 @@ public class UI extends javax.swing.JFrame {
                     if (i == logicM1.length - 1 && k + 1 == logicM1[i].length - 1) {
                         //Verify previous cell
                         if (i != gameSettings.getPassRow() || k + 1 != gameSettings.getPassColumn()) {
+                           
                             uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
                             uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
                             fin.setVisible(true);
@@ -285,6 +292,7 @@ public class UI extends javax.swing.JFrame {
                         //Verify if ant can move right
                         if (k + 1 < logicM1[i].length) {
                             if (i != gameSettings.getPassRow() || k + 1 != gameSettings.getPassColumn()) {
+                                 verifyObstacles(i, k+1);
                                 logicM1[i][k + 1] = -1;//New current position
                                 logicM1[i][k] = 0; //Empty position
                                 uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
@@ -315,6 +323,7 @@ public class UI extends javax.swing.JFrame {
                     if (k - 1 >= 0) {
                          //Verify the previous cell
                         if (gameSettings.getPassRow() != i || k - 1 != gameSettings.getPassColumn()) {
+                             verifyObstacles(i, k-1);
                             logicM1[i][k - 1] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i][k - 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
@@ -347,6 +356,7 @@ public class UI extends javax.swing.JFrame {
                     //Verify if can move up
                     if (i - 1 >= 0) {
                         if (i - 1 != gameSettings.getPassRow() || k != gameSettings.getPassColumn()) {
+                             verifyObstacles(i-1, k);
                             logicM1[i - 1][k] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i - 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
@@ -396,6 +406,7 @@ public class UI extends javax.swing.JFrame {
                         //Verify if the ant can move
                         if (i + 1 < uiMatrix.length) {
                             if(i+1 != gameSettings.getPassRow() || k != gameSettings.getPassColumn()){
+                                 verifyObstacles(i+1, k);
                                 logicM1[i + 1][k] = -1;//New current position
                                 logicM1[i][k] = 0; //Empty position
                                 uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
