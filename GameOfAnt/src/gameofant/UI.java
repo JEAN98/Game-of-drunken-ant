@@ -230,16 +230,18 @@ public class UI extends javax.swing.JFrame {
     
     private void setObstacles(){
         int cont = 0;
-        int i = (int) (Math.random() * gameSettings.getLarge()-1);;
-        int k = (int) (Math.random() * gameSettings.getWidth()-1);
+        int rowsQuantity = (gameSettings.getLarge()-1);
+        int columnsQuantity = (gameSettings.getWidth()-1);
+        int i = (int) (Math.random() * rowsQuantity);
+        int k = (int) (Math.random() * columnsQuantity);
         int obstaclesQuantity = 0;
         obstaclesQuantity = (int)gameSettings.getObstacleQuantity()*3;
         
         while(cont < obstaclesQuantity){
                 
                 while(logicM1[i][k] != 0 ){
-                    i = (int) (Math.random() * (gameSettings.getWidth()-1));
-                    k = (int) (Math.random() * (gameSettings.getLarge()-1));
+                    i = (int) (Math.random() * rowsQuantity);
+                    k = (int) (Math.random() * columnsQuantity);
                 }
                 logicM1[i][k] = 5;
                 sugarCont++;
@@ -247,8 +249,8 @@ public class UI extends javax.swing.JFrame {
                 
                 
                 while (logicM1[i][k] != 0) {
-                    i = (int) (Math.random() * (gameSettings.getWidth()-1));
-                    k = (int) (Math.random() * (gameSettings.getLarge()-1));
+                   i = (int) (Math.random() * rowsQuantity);
+                   k = (int) (Math.random() * columnsQuantity);
                 }
                 logicM1[i][k] = 10;
                 sugarWineCont++;
@@ -256,8 +258,8 @@ public class UI extends javax.swing.JFrame {
            
            
                 while (logicM1[i][k] != 0) {
-                    i = (int) (Math.random() * (gameSettings.getWidth()-1));
-                    k = (int) (Math.random() * (gameSettings.getWidth()-1));
+                    i = (int) (Math.random() * rowsQuantity);
+                    k = (int) (Math.random() * columnsQuantity);
                 }
                 logicM1[i][k] = 15;
                 possionContn++;
