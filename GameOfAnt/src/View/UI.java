@@ -31,7 +31,7 @@ public class UI extends javax.swing.JFrame {
     //Key Up 38;    //Key left  37;     //Key Right 39;    // Key Down 40;
     
     JLabel [][] uiMatrix;
-    int [][] logicM1;
+   int [][] logicM1;
     GameSettingsModel gameSettings;
     GameModel gameModel;
     int sugarCont = 0;
@@ -45,8 +45,8 @@ public class UI extends javax.swing.JFrame {
     public UI(GameSettingsModel model) {
         this.randomRows = new ArrayList();
         initComponents();
-        uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
-        logicM1 = new int[model.getLarge()][model.getWidth()];
+   //  uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
+    logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
         creationMatrixByModel();
        // creationOfMatrix();
@@ -93,7 +93,18 @@ public class UI extends javax.swing.JFrame {
       //Here we can detect what is key pressed
            
        if (evt.getKeyCode() == 39) 
-           moveRight();//key rigth pressed
+       {
+           uiMatrix = ant.MoveRight();
+           if(ant.getSound()){
+               soundEvent();
+           }
+           if(ant.getWinner()){
+                 JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
+           }
+           //  moveRight();//key rigth pressed
+       }
+       
+           
        
        
        else if(evt.getKeyCode() == 37)
@@ -104,6 +115,8 @@ public class UI extends javax.swing.JFrame {
        
        else if(evt.getKeyCode() == 38)
            moveUp(); //key up pressed
+       
+       showMovement();
     }//GEN-LAST:event_formKeyPressed
    private void showStepsHistory(){
        //Here we can show the stepts that ant made  
@@ -114,47 +127,33 @@ public class UI extends javax.swing.JFrame {
           cont++;
       }
    }
-   private int getRowsHistory(int i){
-       return gameSettings.getRowHistory().get(i);
-   }
-   private int getColumnHistory(int k){
-       return gameSettings.getColumnHistory().get(k);
-   } 
-   
+
    private void showGarden(){
-      
        ImageIcon fond = new ImageIcon(new ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg")).getImage());
-         
    }
-   
-   private void saveCurrentCell(int i, int k){
-      // gameSettings.setCurrentRow(i);
-      // gameSettings.setCurrentColumn(k);
-   }
-   
-    private void saveStepsHistory(int i, int k){
-       //Here we can save the steps by ant
-       gameSettings.setRowHistory(i);
-       gameSettings.setColumnHistory(k);
-   }
-      private void soundEvent(){
+
+   private void soundEvent(){
       //Here can to display of sound 
       AudioClip sound;
       //we must to search the sound inside the package
       sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/Sonido_de_interrupci_n_Tuuuuuu.wav"));
       sound.play();
     }
-      
+   
     private void creationMatrixByModel(){
     //Here we are going to send the information about 
     //large and width that matrix is going to have
         gameModel = new GameModel(gameSettings.getLarge(),gameSettings.getWidth());
         gameModel.setUiMatrix();
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
+        antCreation();
         showMatrix();
-    }  
+    } 
     
-    
+    private void antCreation(){
+        //Creation of Ant with uiMatrix and  logicm1
+        ant = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
+    }
     private void showMatrix()
     {
        //Here we are going to show the matrix that we created in the class
@@ -162,7 +161,7 @@ public class UI extends javax.swing.JFrame {
         int x=45;//Large
         int y = 50; //width
         uiMatrix = gameModel.getUiMatrix();
-        logicM1 = gameModel.getLogicM1();
+      //  logicM1 = gameModel.getLogicM1();
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {
                  x+=45;
@@ -179,7 +178,19 @@ public class UI extends javax.swing.JFrame {
              x = 45;
             y += 50;
         }
-    }      
+    }     
+   
+    private void showMovement(){
+     //Here we can show the current matrix the recent movement
+      uiMatrix = ant.getUiMatrix();
+          for (int i = 0; i < uiMatrix.length; i++) {
+            for (int j = 0; j < uiMatrix[i].length; j++) {
+                 add(uiMatrix[i][j],null);
+                 if(ant.getLogicM1()[i][j] == -1)
+                    // return;
+            }
+        }
+    }
       
       
     /*
@@ -253,11 +264,16 @@ public class UI extends javax.swing.JFrame {
         System.out.println("Ready");
     }
     */
-    
-    private void antCreation(){
-        ant = new AntModel(uiMatrix, logicM1);
-    }
-    
+       private void saveCurrentCell(int i, int k){
+      // gameSettings.setCurrentRow(i);
+      // gameSettings.setCurrentColumn(k);
+   }
+  private void saveStepsHistory(int i, int k){
+       //Here we can save the steps by ant
+       gameSettings.setRowHistory(i);
+       gameSettings.setColumnHistory(k);
+   }
+  /*
     private void  verifyObstacles(int i,int k){
         
         if(logicM1[i][k] == 5){
@@ -274,7 +290,13 @@ public class UI extends javax.swing.JFrame {
            // return 5;
         }
        // return 0;
-    }
+    }*/
+      private int getRowsHistory(int i){
+       return gameSettings.getRowHistory().get(i);
+   }
+   private int getColumnHistory(int k){
+       return gameSettings.getColumnHistory().get(k);
+   } 
     /*
     private void setObstacles(){
         int cont = 0;
@@ -343,7 +365,7 @@ public class UI extends javax.swing.JFrame {
                         //Verify if ant can move right
                         if (k + 1 < logicM1[i].length) {
                             if (i != gameSettings.getPassRow() || k + 1 != gameSettings.getPassColumn()) {
-                                 verifyObstacles(i, k+1);
+                              //   verifyObstacles(i, k+1);
                                 logicM1[i][k + 1] = -1;//New current position
                                 logicM1[i][k] = 0; //Empty position
                                 uiMatrix[i][k + 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
@@ -374,7 +396,7 @@ public class UI extends javax.swing.JFrame {
                     if (k - 1 >= 0) {
                          //Verify the previous cell
                         if (gameSettings.getPassRow() != i || k - 1 != gameSettings.getPassColumn()) {
-                             verifyObstacles(i, k-1);
+                            // verifyObstacles(i, k-1);
                             logicM1[i][k - 1] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i][k - 1].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
@@ -407,7 +429,7 @@ public class UI extends javax.swing.JFrame {
                     //Verify if can move up
                     if (i - 1 >= 0) {
                         if (i - 1 != gameSettings.getPassRow() || k != gameSettings.getPassColumn()) {
-                             verifyObstacles(i-1, k);
+                           //  verifyObstacles(i-1, k);
                             logicM1[i - 1][k] = -1;//New current position
                             logicM1[i][k] = 0; //Empty position
                             uiMatrix[i - 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
@@ -457,7 +479,7 @@ public class UI extends javax.swing.JFrame {
                         //Verify if the ant can move
                         if (i + 1 < uiMatrix.length) {
                             if(i+1 != gameSettings.getPassRow() || k != gameSettings.getPassColumn()){
-                                 verifyObstacles(i+1, k);
+                             //    verifyObstacles(i+1, k);
                                 logicM1[i + 1][k] = -1;//New current position
                                 logicM1[i][k] = 0; //Empty position
                                 uiMatrix[i + 1][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
