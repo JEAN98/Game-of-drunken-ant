@@ -1,6 +1,8 @@
 
-package gameofant;
+package View;
 
+import Model.GameSettingsModel;
+import View.UI;
 import javax.swing.JFrame;
 
 

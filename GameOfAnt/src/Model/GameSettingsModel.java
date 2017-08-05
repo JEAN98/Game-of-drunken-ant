@@ -1,4 +1,4 @@
-package gameofant;
+package Model;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

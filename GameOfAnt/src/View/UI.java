@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gameofant;
+package View;
 
+import Model.AntModel;
+import Model.GameModel;
+import Model.GameSettingsModel;
 import javax.swing.JLabel; import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Label;
@@ -14,6 +17,7 @@ import java.applet.AudioClip;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.text.html.parser.DTDConstants;
 
 
 public class UI extends javax.swing.JFrame {
@@ -29,13 +33,14 @@ public class UI extends javax.swing.JFrame {
     JLabel [][] uiMatrix;
     int [][] logicM1;
     GameSettingsModel gameSettings;
-
+    GameModel gameModel;
     int sugarCont = 0;
     int sugarWineCont = 0;
     int possionContn = 0;
     ArrayList<Integer> randomRows;
+    AntModel ant;
+    
  
-    javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
     
     public UI(GameSettingsModel model) {
         this.randomRows = new ArrayList();
@@ -43,8 +48,9 @@ public class UI extends javax.swing.JFrame {
         uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
         logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
-        creationOfMatrix();
-        creationOfLogicMatrix();
+        creationMatrixByModel();
+       // creationOfMatrix();
+        //creationOfLogicMatrix();
        
     }   JLabel fin = new JLabel();
 
@@ -122,8 +128,8 @@ public class UI extends javax.swing.JFrame {
    }
    
    private void saveCurrentCell(int i, int k){
-       gameSettings.setCurrentRow(i);
-       gameSettings.setCurrentColumn(k);
+      // gameSettings.setCurrentRow(i);
+      // gameSettings.setCurrentColumn(k);
    }
    
     private void saveStepsHistory(int i, int k){
@@ -138,14 +144,53 @@ public class UI extends javax.swing.JFrame {
       sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/Sonido_de_interrupci_n_Tuuuuuu.wav"));
       sound.play();
     }
+      
+    private void creationMatrixByModel(){
+    //Here we are going to send the information about 
+    //large and width that matrix is going to have
+        gameModel = new GameModel(gameSettings.getLarge(),gameSettings.getWidth());
+        gameModel.setUiMatrix();
+        gameModel.setLogicM1(gameSettings.getObstacleQuantity());
+        showMatrix();
+    }  
+    
+    
+    private void showMatrix()
+    {
+       //Here we are going to show the matrix that we created in the class
+       javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
+        int x=45;//Large
+        int y = 50; //width
+        uiMatrix = gameModel.getUiMatrix();
+        logicM1 = gameModel.getLogicM1();
+        for (int i = 0; i < uiMatrix.length; i++) {
+            for (int j = 0; j < uiMatrix[i].length; j++) {
+                 x+=45;
+                 if (i == uiMatrix.length - 1 && j == uiMatrix[i].length - 1) {
+                     //Here we are going to create the house of ant
+                       fin.setBounds(x,y,45+52,50+19);
+                       fin.setBorder(border); 
+                       fin.setVisible(false);
+                       fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
+                       add(fin,null);
+                   } 
+                 add(uiMatrix[i][j],null);
+            }
+             x = 45;
+            y += 50;
+        }
+    }      
+      
+      
+    /*
      //In this method we can create the Matrix of game
     private void creationOfMatrix(){
        //minimum of large is 7 and Maximiun 13 of large
        //Maximiun of width is 7 and Maximiun 18 of width
-
+     javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
         int x=45;//Large
         int y = 50; //width
-             
+       
            for (int i = 0; i < uiMatrix.length; i++) {            
                for (int k = 0; k < uiMatrix[i].length; k++) {
                    
@@ -184,13 +229,10 @@ public class UI extends javax.swing.JFrame {
             y += 50;
         }
     }
+    */
 
-    private int randomRowSugar(){
-        return (int) (Math.random() * gameSettings.getLarge());
-        
-    }
-
-    private void creationOfLogicMatrix() {
+    /*
+     private void creationOfLogicMatrix() {
         for (int i = 0; i < logicM1.length; i++) {
             for (int k = 0; k < logicM1[i].length; k++) {
 
@@ -207,7 +249,13 @@ public class UI extends javax.swing.JFrame {
             }
         }
         setObstacles();
+        
         System.out.println("Ready");
+    }
+    */
+    
+    private void antCreation(){
+        ant = new AntModel(uiMatrix, logicM1);
     }
     
     private void  verifyObstacles(int i,int k){
@@ -227,7 +275,7 @@ public class UI extends javax.swing.JFrame {
         }
        // return 0;
     }
-    
+    /*
     private void setObstacles(){
         int cont = 0;
         int rowsQuantity = (gameSettings.getLarge()-1);
@@ -266,6 +314,7 @@ public class UI extends javax.swing.JFrame {
                 cont++; 
         }
     }
+    */
 
     public void moveRight() {
         for (int i = 0; i < uiMatrix.length; i++) {
