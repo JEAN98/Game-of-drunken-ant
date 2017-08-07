@@ -46,7 +46,7 @@ public class UI extends javax.swing.JFrame {
         this.randomRows = new ArrayList();
         initComponents();
    //  uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
-    logicM1 = new int[model.getLarge()][model.getWidth()];
+      logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
         creationMatrixByModel();
        // creationOfMatrix();
@@ -95,26 +95,36 @@ public class UI extends javax.swing.JFrame {
        if (evt.getKeyCode() == 39) 
        {
            uiMatrix = ant.MoveRight();
-           if(ant.getSound()){
+           if(ant.getSound())
                soundEvent();
-           }
-           if(ant.getWinner()){
+           
+           if(ant.getWinner())
                  JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
-           }
+           
            //  moveRight();//key rigth pressed
        }
-       
-           
-       
-       
+
        else if(evt.getKeyCode() == 37)
-           moveLeft();//key left pressed
+       {
+           uiMatrix = ant.MoveLeft();
+            if(ant.getSound())
+               soundEvent();
+
+           // moveLeft();//key left pressed
+       }
+          
        
        else if (evt.getKeyCode() == 40)
            moveDown();//key down pressed
        
-       else if(evt.getKeyCode() == 38)
-           moveUp(); //key up pressed
+       else if(evt.getKeyCode() == 38){
+           
+           uiMatrix = ant.MoveUp();
+           if(ant.getSound())
+               soundEvent();
+           // moveUp(); //key up pressed
+       }
+          
        
        showMovement();
     }//GEN-LAST:event_formKeyPressed
@@ -187,7 +197,7 @@ public class UI extends javax.swing.JFrame {
             for (int j = 0; j < uiMatrix[i].length; j++) {
                  add(uiMatrix[i][j],null);
                  if(ant.getLogicM1()[i][j] == -1)
-                    // return;
+                      return;
             }
         }
     }
