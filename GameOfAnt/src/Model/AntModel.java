@@ -34,6 +34,38 @@ public class AntModel implements AntOperations{
       currentColumn = 0;
     }
 
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public int getAlcoholismLevel() {
+        return alcoholismLevel;
+    }
+
+    public void setAlcoholismLevel(int alcoholismLevel) {
+        this.alcoholismLevel = alcoholismLevel;
+    }
+
+    public int getSugarLevel() {
+        return sugarLevel;
+    }
+
+    public void setSugarLevel(int sugarLevel) {
+        this.sugarLevel = sugarLevel;
+    }
+
+    public int getStepsbyAnt() {
+        return stepsbyAnt;
+    }
+
+    public void setStepsbyAnt(int stepsbyAnt) {
+        this.stepsbyAnt = stepsbyAnt;
+    }
+
     public JLabel[][] getUiMatrix() {
         return uiMatrix;
     }
@@ -71,92 +103,76 @@ public class AntModel implements AntOperations{
     public boolean getSound() {
         return sound;
     }
-    
+
     public boolean getWinner() {
         return winner;
     }
-    
-    private void updateMatrix(int currentI,int currentK, int i ,int k,ImageIcon icon){
+
+    private void updateMatrix(int currentI, int currentK, int i, int k, ImageIcon icon) {
         //Here we can update logic matrix and fisical matrix
         logicM1[currentI][currentK] = -1;
         logicM1[i][k] = 0;
         uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
         stepsbyAnt++;
-        
-        if(icon!=null)
-            uiMatrix[i][k+1].setIcon(icon);
-        else
+
+        if (icon != null) {
+            uiMatrix[currentI][currentK].setIcon(icon);
+        } else {
             uiMatrix[currentI][currentK].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));
-        
+        }
+
         currentRow = currentI; // save current row
         currentColumn = currentK; // save current column
         passRow = i; //save the previous row 
         passColumn = k; //save  previous column
-    
+
     }
-  
+
     @Override
     public JLabel[][] MoveRight() {
-     for (int i = 0; i < uiMatrix.length; i++) {
+        sound = false;
+        for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                 //Verify the current Position
                 if (logicM1[i][k] == -1) {
-                     //Verify if the next cell is the end
-                    if (i == logicM1.length - 1 && k + 1 == logicM1[i].length - 1) {
-                        //Verify previous cell
-                        if (i != passRow || k + 1 != passColumn) {
-                            ImageIcon icon = verifyObstacles(i, k+1);
-                            if ( icon != null) {
-                               JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
-                                updateMatrix(i, k+1, i, k, icon);
-                                return uiMatrix;
-                            } else {
-                                updateMatrix(i, k+1, i, k,null);
-                                winner = true;
-                                sound = false;
-                                return uiMatrix;
-                            }
-                        } 
-                        else {
-                            winner = false;
-                            sound = true;
+                    //Verify if the next cell is the end
+                    if (k + 1 < uiMatrix[i].length) {
+                        if (i == logicM1.length - 1 && k + 1 == logicM1[i].length - 1) {
+                            //Verify previous cell
+                            updateMatrix(i, k + 1, i, k, null);
+                            winner = true;
                             return uiMatrix;
-                        }
-                    } else {
-                        //Verify if ant can move right
-                        if (k + 1 < logicM1[i].length) {
+                        } else {
                             if (i != passRow || k + 1 != passColumn) {
                                 ImageIcon icon = verifyObstacles(i, k + 1);
                                 if (icon != null) {
                                     JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
-                                    updateMatrix(i, k+1, i, k, icon);
+                                    updateMatrix(i, k + 1, i, k, icon);
                                     return uiMatrix;
                                 } else {
-                                    updateMatrix(i, k+1, i, k,null);
+                                    updateMatrix(i, k + 1, i, k, null);
                                     winner = false;
-                                    sound = false;
                                     return uiMatrix;
                                 }
-                            }
-                            else {
-                                 winner = false;
-                                 sound = false;
-                                 return uiMatrix;
+                            } else {
+                                winner = false;
+                                return uiMatrix;
                             }
                         }
-                        else{
-                            sound = true;
-                            return uiMatrix; 
-                        }
+                    } else {
+                        sound = true;
+                        return uiMatrix;
                     }
                 }
             }
         }
-     return uiMatrix;
+
+        return uiMatrix;
     }
-    
+
     @Override
     public JLabel[][] MoveLeft() {
+        sound = false;
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                  //Verify the current Position
@@ -165,16 +181,14 @@ public class AntModel implements AntOperations{
                     if (k - 1 >= 0) {
                          //Verify the previous cell
                         if (passRow != i || k - 1 != passColumn) {
-                           ImageIcon icon = verifyObstacles(i, k+1);
+                           ImageIcon icon = verifyObstacles(i, k-1);
                             if ( icon != null) {
                                 JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
                                 updateMatrix(i, k-1, i, k, icon);
-                                sound = false;
                                 return uiMatrix;
                             }
                             else{
                             updateMatrix(i, k-1, i, k, null);
-                            sound = false;
                             return uiMatrix;
                             }
                            
@@ -188,7 +202,6 @@ public class AntModel implements AntOperations{
                         sound = true;
                         return uiMatrix;
                     }
-
                 }
             }
         }
@@ -197,6 +210,7 @@ public class AntModel implements AntOperations{
 
     @Override
     public JLabel[][] MoveUp() {
+        sound = false;
          for (int i = 0; i < uiMatrix.length; i++) {
             for (int k = 0; k < uiMatrix[i].length; k++) {
                 //Verify the current Position
@@ -204,24 +218,21 @@ public class AntModel implements AntOperations{
                     //Verify if can move up
                     if (i - 1 >= 0) {
                         if (i - 1 != passRow || k != passColumn) {
-                            ImageIcon icon = verifyObstacles(i, k + 1);
+                            ImageIcon icon = verifyObstacles(i-1, k);
                             if (icon != null) {
                                 updateMatrix(i - 1, k, i, k, icon);
                                 JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
-                                sound = false;
                                 return uiMatrix;
                                 
                             } else {
                                 updateMatrix(i - 1, k, i, k, icon);
-                                sound = false;
-                                return uiMatrix;
+                                 return uiMatrix;
                             }
 
                         } else {
                             sound = true;
                             return uiMatrix;
                         }
-
                     } //Can't move up, for this we are going to show a message
                     else {
                         sound = true;
@@ -235,6 +246,45 @@ public class AntModel implements AntOperations{
 
     @Override
     public JLabel[][] MoveDown() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        sound = false;
+           for (int i = 0; i < uiMatrix.length; i++) {
+            for (int k = 0; k < uiMatrix[i].length; k++) {
+                //Verify the current Position
+                if (logicM1[i][k] == -1) {
+                    //Verify is the end postion
+                    if (i + 1 == logicM1.length - 1 && k == logicM1[i].length - 1) {
+                            updateMatrix(i+1, k, i, k, null);
+                            JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
+                            winner = true;
+                            return uiMatrix;
+
+                    } else {
+                        //Verify if the ant can move
+                        if (i + 1 < uiMatrix.length) {
+                            if(i+1 != passRow || k != passColumn){
+                               ImageIcon icon = verifyObstacles(i+1,k);
+                            if (icon != null) {
+                                updateMatrix(i+1, k, i, k, icon);
+                                return uiMatrix;
+                            }
+                            else{
+                                 updateMatrix(i+1, k, i, k, null);
+                                  return uiMatrix;
+                            }
+                            } else {
+                                 sound = true;                  
+                                 return uiMatrix;
+                            }
+                        } //The ant can´t move
+                        else {
+                            winner = false;
+                            sound = true;
+                            return uiMatrix;
+                        }
+                    }
+                }
+            }
+        }
+      return uiMatrix;
     }
 }
