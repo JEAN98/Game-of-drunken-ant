@@ -1,6 +1,7 @@
 
 package Model;
 
+import View.GameOfAnt;
 import java.applet.AudioClip;
 import java.awt.Color;
 import javax.swing.BorderFactory;
@@ -23,6 +24,7 @@ public class AntModel implements AntOperations{
     private int passRow;
     private int passColumn;
     private int stepsbyAnt;
+    private String passPosition;
     private boolean sound;
     private boolean winner;
 
@@ -141,6 +143,7 @@ public class AntModel implements AntOperations{
                             //Verify previous cell
                             updateMatrix(i, k + 1, i, k, null);
                             winner = true;
+                             passPosition = "left";
                             return uiMatrix;
                         } else {
                             if (i != passRow || k + 1 != passColumn) {
@@ -148,6 +151,7 @@ public class AntModel implements AntOperations{
                                 if (icon != null) {
                                     JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
                                     updateMatrix(i, k + 1, i, k, icon);
+                                    passPosition = "left";
                                     return uiMatrix;
                                 } else {
                                     updateMatrix(i, k + 1, i, k, null);
@@ -185,10 +189,12 @@ public class AntModel implements AntOperations{
                             if ( icon != null) {
                                 JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
                                 updateMatrix(i, k-1, i, k, icon);
+                                 passPosition = "rigth";
                                 return uiMatrix;
                             }
                             else{
                             updateMatrix(i, k-1, i, k, null);
+                             passPosition = "rigth";
                             return uiMatrix;
                             }
                            
@@ -222,10 +228,12 @@ public class AntModel implements AntOperations{
                             if (icon != null) {
                                 updateMatrix(i - 1, k, i, k, icon);
                                 JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
+                                 passPosition = "down";
                                 return uiMatrix;
                                 
                             } else {
                                 updateMatrix(i - 1, k, i, k, icon);
+                                 passPosition = "down";
                                  return uiMatrix;
                             }
 
@@ -256,6 +264,7 @@ public class AntModel implements AntOperations{
                             updateMatrix(i+1, k, i, k, null);
                             JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
                             winner = true;
+                            passPosition = "up";
                             return uiMatrix;
 
                     } else {
@@ -265,10 +274,12 @@ public class AntModel implements AntOperations{
                                ImageIcon icon = verifyObstacles(i+1,k);
                             if (icon != null) {
                                 updateMatrix(i+1, k, i, k, icon);
+                                passPosition = "up";
                                 return uiMatrix;
                             }
                             else{
                                  updateMatrix(i+1, k, i, k, null);
+                                  passPosition = "up";
                                   return uiMatrix;
                             }
                             } else {
@@ -287,4 +298,35 @@ public class AntModel implements AntOperations{
         }
       return uiMatrix;
     }
+
+    @Override
+    public void Hip() {
+        //Here we are going to create the hip, that is a new position according random
+        //HiUp = 1, HipDown = 2, HipRigth = 3, HipLeft = 4
+
+        int result = 0;
+        Boolean bus = false;
+        while( bus == false){
+            result = (int) (Math.random() * 4) + 1;
+
+            if (result == 1 && passPosition != "down") {
+                //Verify if we can moveUp
+                if (currentRow - 1 >= 0) {
+                    MoveUp();
+                    return;
+                }
+            } 
+            else if (result == 2 && passPosition != "up") {
+                   if(currentRow +1 < logicM1.length){
+                       MoveDown();
+                       return;
+                   }
+            }
+            else if(result == 3 && passPosition != "left"){
+               //if(currentColumn + 1 < )
+            }
+        }
+     
+    }
+    
 }

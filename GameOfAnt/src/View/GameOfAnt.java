@@ -8,10 +8,11 @@ import javax.swing.JFrame;
 
 public class GameOfAnt {
 
-   static GameSettingsModel model = new GameSettingsModel("Jean", 13, 18, 5);
+   static GameSettingsModel model1;
     public static void main(String[] args) {
         //
-        UI newView = new UI(model); //13 * 18 maximun
+        model1 = new GameSettingsModel("Jean", 13, 18, 5);
+        UI newView = new UI(model1); //13 * 18 maximun
         newView.setVisible(true);
         newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         newView.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -8,16 +8,9 @@ public class GameSettingsModel {
     private String nickName;
     private int large;
     private int width;
-    private int life;
     private int obstacleQuantity;
     private int stepsQuantityMade;
     private int betterScore;
-    private int alcoholismLevel;
-    private int sugarLevel;
-    private int currentRow;
-    private int currentColumn;
-    private int passRow;
-    private int passColumn;
     private ArrayList<Integer> rowHistory;
     private ArrayList<Integer> columnHistory;
 
@@ -25,16 +18,9 @@ public class GameSettingsModel {
         this.nickName = nickName;
         this.large = large;
         this.width = width;
-        this.life = 100;
         this.obstacleQuantity = obstacleQuantity;
         this.stepsQuantityMade = 0;
         this.betterScore = 0;
-        this.alcoholismLevel = 0;
-        this.sugarLevel = 0;
-        this.currentColumn = 0;
-        this.currentRow = 0;
-        this.passRow = -100;
-        this.passColumn = -100;
         this.rowHistory = new ArrayList<>();
         this.columnHistory = new ArrayList<>();
     }
@@ -63,12 +49,13 @@ public class GameSettingsModel {
         this.width = width;
     }
 
-    public int getLife() {
-        return life;
+ 
+    public int getBetterScore() {
+        return betterScore;
     }
 
-    public void setLife(int life) {
-        this.life = life;
+    public void setBetterScore(int betterScore) {
+        this.betterScore = betterScore;
     }
 
     public int getObstacleQuantity() {
@@ -87,62 +74,7 @@ public class GameSettingsModel {
         this.stepsQuantityMade = stepsQuantityMade;
     }
 
-    public int getBetterScore() {
-        return betterScore;
-    }
-
-    public void setBetterScore(int betterScore) {
-        this.betterScore = betterScore;
-    }
-
-    public int getAlcoholismLevel() {
-        return alcoholismLevel;
-    }
-
-    public void setAlcoholismLevel(int alcoholismLevel) {
-        this.alcoholismLevel = alcoholismLevel;
-    }
-
-    public int getSugarLevel() {
-        return sugarLevel;
-    }
-
-    public void setSugarLevel(int sugarLevel) {
-        this.sugarLevel = sugarLevel;
-    }
-
-    public int getCurrentRow() {
-        return currentRow;
-    }
-
-    public void setCurrentRow(int currentRow) {
-        this.currentRow = currentRow;
-    }
-
-    public int getCurrentColumn() {
-        return currentColumn;
-    }
-
-    public void setCurrentColumn(int currentColumn) {
-        this.currentColumn = currentColumn;
-    }
-
-    public int getPassRow() {
-        return passRow;
-    }
-
-    public void setPassRow(int passRow) {
-        this.passRow = passRow;
-    }
-
-    public int getPassColumn() {
-        return passColumn;
-    }
-
-    public void setPassColumn(int passColumn) {
-        this.passColumn = passColumn;
-    }
-
+  
     public ArrayList<Integer> getRowHistory() {
         return rowHistory;
     }

@@ -9,4 +9,5 @@ public interface AntOperations {
   public  JLabel[][] MoveLeft();
   public  JLabel[][] MoveUp();
   public  JLabel[][] MoveDown();
+  public  void  Hip();
 }
