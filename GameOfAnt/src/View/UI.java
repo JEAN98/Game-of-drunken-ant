@@ -180,6 +180,7 @@ public class UI extends javax.swing.JFrame {
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
         antCreation();
         showMatrix();
+        
     } 
     
     private void antCreation(){

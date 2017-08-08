@@ -49,15 +49,6 @@ public class GameSettingsModel {
         this.width = width;
     }
 
- 
-    public int getBetterScore() {
-        return betterScore;
-    }
-
-    public void setBetterScore(int betterScore) {
-        this.betterScore = betterScore;
-    }
-
     public int getObstacleQuantity() {
         return obstacleQuantity;
     }
@@ -72,6 +63,15 @@ public class GameSettingsModel {
 
     public void setStepsQuantityMade(int stepsQuantityMade) {
         this.stepsQuantityMade = stepsQuantityMade;
+    }
+
+ 
+    public int getBetterScore() {
+        return betterScore;
+    }
+
+    public void setBetterScore(int betterScore) {
+        this.betterScore = betterScore;
     }
 
   

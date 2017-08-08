@@ -323,10 +323,18 @@ public class AntModel implements AntOperations{
                    }
             }
             else if(result == 3 && passPosition != "left"){
-               //if(currentColumn + 1 < )
+               if(currentColumn -1 > 0 ){
+                   MoveLeft();
+                   return;
+               }
+            }
+            else if(result == 4 && passPosition != "rigth"){
+                if(currentColumn + 1 <  GameOfAnt.model1.getWidth()){
+                    MoveRight();
+                    return;
+                }
             }
         }
-     
     }
     
 }

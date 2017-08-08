@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 public class GameOfAnt {
 
-   static GameSettingsModel model1;
+   public static GameSettingsModel model1;
     public static void main(String[] args) {
         //
         model1 = new GameSettingsModel("Jean", 13, 18, 5);
