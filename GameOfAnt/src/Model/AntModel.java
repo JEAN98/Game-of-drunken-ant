@@ -87,15 +87,18 @@ public class AntModel implements AntOperations{
     private ImageIcon verifyObstacles(int i, int k) {
       //Here we can verify if the current cell have something
       if(logicM1[i][k] == 5){
+          // The ant found sugar
            //JOptionPane.showMessageDialog(null, "Very good", "Sugar", JOptionPane.INFORMATION_MESSAGE);
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
         }
         if(logicM1[i][k] == 10)
         {
+            //The ant found sugar with alchol
            //JOptionPane.showMessageDialog(null, "Bad", "Sugar with alchol", JOptionPane.INFORMATION_MESSAGE);
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
         }
         if(logicM1[i][k] == 15){
+          //The ant found possion
          //JOptionPane.showMessageDialog(null, "Bad", "Possion!!", JOptionPane.INFORMATION_MESSAGE);
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
         }
