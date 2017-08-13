@@ -107,11 +107,11 @@ public class AntModel implements AntOperations{
                 }
             }
           
-            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
+            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/sugar.png"));
         }
         if(logicM1[i][k] == 10)
         {
-            alcoholismLevel = 50;
+            
             //The ant found sugar with alchol
             if(possion > 0 && possion < 4){
                JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for alcholism Level and possion!", JOptionPane.INFORMATION_MESSAGE);
@@ -132,7 +132,7 @@ public class AntModel implements AntOperations{
                 //StopGame
             }
           
-            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
+            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/sugarWine.png"));
         }
         if(logicM1[i][k] == 15){
             //The and found the possion
@@ -143,7 +143,7 @@ public class AntModel implements AntOperations{
                 life -= 50; 
                 possion = 1; //Activation according to possion
             }
-            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
+            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/possion.png"));
         }
      
         
