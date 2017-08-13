@@ -14,8 +14,7 @@ public class GameOfAnt {
    
     public static void main(String[] args) {
         //
-        model1 = new GameSettingsModel("Jean", 13, 18, 5);
-        UI newView = new UI(model1); //13 * 18 maximun
+    
         Settings settings = new Settings();
         
         settings.setVisible(true);

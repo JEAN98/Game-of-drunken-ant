@@ -1,6 +1,6 @@
-
 package View;
 
+import Model.GameSettingsModel;
 import static View.GameOfAnt.model1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,112 +10,116 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
 public class Settings extends javax.swing.JFrame {
+    
+    String fileInformation;
 
-    String cadena;
     public Settings() {
         initComponents();
-       
+        
     }
-    private boolean verifyText(){
-      if(jTextFieldNickNma.getText().equals("")||jTextFieldObstacles.getText().equals(""))
-          return false;
-    
-      return true;
+
+    private boolean verifyText() {
+        if (jTextFieldNickNma.getText().equals("") || jTextFieldObstacles.getText().equals("")) {
+            return false;
+        }
+        
+        return true;
     }
     
-    public void createGame(String large,String weight,String nickName,String quantityObstacles){
-          try {
-     //Call the file
+    public void createGame(String large, String weight, String nickName, String quantityObstacles) {
+        try {
+            //Call the file
             String dir = "C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt";
             File file = new File(dir);
-            
-      //Object about buffer
+
+            //Object about buffer
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             bw.write("");
-            FileWriter write1=new FileWriter(file,true);
+            FileWriter write1 = new FileWriter(file, true);
             
-            String information="";
+            String information = "";
             information += large;
-            information += " "+weight;
-            information +=" "+nickName;
-            information +=" "+quantityObstacles;
+            information += " " + weight;
+            information += " " + nickName;
+            information += " " + quantityObstacles;
             
             write1.write(information);            
             write1.close();
             findInformation(dir);
-            
-         } //Si existe un problema al escribir cae aqui
+        } //Si existe un problema al escribir cae aqui
         catch (Exception e) {
             System.out.println("Error al escribir");
         }
     }
-    
+
     //In this method we can get the information inside of file 
-    private void findInformation(String fileDir) throws FileNotFoundException, IOException{
-   
-      FileReader f = new FileReader(fileDir);
-      BufferedReader b = new BufferedReader(f);
-      
-      //While
-      if((cadena = b.readLine())!= null) {
-          System.out.println(cadena);
-          //Line of file    
-      }
-      b.close();
+    private void findInformation(String fileDir) throws FileNotFoundException, IOException {
+        
+        FileReader f = new FileReader(fileDir);
+        BufferedReader b = new BufferedReader(f);
+
+        //While
+        if ((fileInformation = b.readLine()) != null) {
+            System.out.println(fileInformation);
+            //Line of file    
+        }
+        b.close();
     }
     
-    private void sendGameInformation(){
+    private void sendGameInformation() {
 //        String test = cadena.substring(0, getGameInformation(0));
 //        int rows =getGameInformation(0);
     }
-    private void  getGameInformation(){
 
-       String result = "";
-       int cont = 0;
-       //Find the quantity of rows
-       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
-           result += String.valueOf(cadena.charAt(cont));
-           cont++;
+    private void getGameInformation() {
+        
+        String result = "";
+        int cont = 0;
+        //Find the quantity of rows
+        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+            result += String.valueOf(fileInformation.charAt(cont));
+            cont++;
         }
-        GameOfAnt.model1.setLarge(Integer.parseInt(result));
+        int rows = Integer.parseInt(result);
         cont++;
         result = ""; //Reset the variable
-        
+
         //Find the quantity of columns
-       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
-           result += String.valueOf(cadena.charAt(cont));
-           cont++;
+        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+            result += String.valueOf(fileInformation.charAt(cont));
+            cont++;
         }
-        GameOfAnt.model1.setWidth(Integer.parseInt(result));
+        int columns = Integer.parseInt(result);
         cont++;
         result = ""; //Reset the variable
-        
+
         //Find the nickName
-       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
-           result += String.valueOf(cadena.charAt(cont));
-           cont++;
+        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+            result += String.valueOf(fileInformation.charAt(cont));
+            cont++;
         }
-        GameOfAnt.model1.setNickName(result);
+        String nickName = result;
         cont++;
         result = ""; //Reset the variable
-        
-         //Find the quantity of obstacles
-       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
-           result += String.valueOf(cadena.charAt(cont));
-           if(cont +1 == cadena.length()){
-               break;
-           }
-           cont++;
+
+        //Find the quantity of obstacles
+        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+            result += String.valueOf(fileInformation.charAt(cont));
+            if (cont + 1 == fileInformation.length()) {
+                break;
+            }
+            cont++;
         }
-        GameOfAnt.model1.setObstacleQuantity(Integer.parseInt(result));
-     
+        int obstaclesQuantity = Integer.parseInt(result);
+        model1 = new GameSettingsModel(nickName, rows, columns, obstaclesQuantity);
     }
-  
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -362,6 +366,11 @@ public class Settings extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Continue Game");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/TESTTREE3.png"))); // NOI18N
 
@@ -499,17 +508,38 @@ public class Settings extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(verifyText()){
-            createGame(jComboBox2.getSelectedItem().toString(), jComboBox1.getSelectedItem().toString(), jTextFieldNickNma.getText(),jTextFieldObstacles.getText());
+        if (verifyText()) {
+            createGame(jComboBox2.getSelectedItem().toString(), jComboBox1.getSelectedItem().toString(), jTextFieldNickNma.getText(), jTextFieldObstacles.getText());
             getGameInformation();
-              UI newView = new UI(model1); //13 * 18 maximun
-         newView.setVisible(true);
-      newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-       newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        }    
-        else
+            UI newView = new UI(model1); //13 * 18 maximun
+            newView.setVisible(true);
+            newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            
+        } else {
             JOptionPane.showMessageDialog(null, "Please, complete all spaces", "Problems!", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+        
+    private void showCurrentInformation(){
+        
+    }
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            //Here we can to coninue our game,because the information is saved in the Settings file
+            findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
+            getGameInformation();
+            UI newView = new UI(model1); //13 * 18 maximun
+            newView.setVisible(true);
+            newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

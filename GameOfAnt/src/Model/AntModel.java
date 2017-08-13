@@ -24,6 +24,7 @@ public class AntModel implements AntOperations{
     private int passRow;
     private int passColumn;
     private int stepsbyAnt;
+    private int possion;
     private String passPosition;
     private boolean sound;
     private boolean winner;
@@ -86,22 +87,66 @@ public class AntModel implements AntOperations{
     
     private ImageIcon verifyObstacles(int i, int k) {
       //Here we can verify if the current cell have something
+       
+      //Verify the status of possion
+       if(possion == 3 )
+            possion = 0;
+       if(possion > 0)
+            possion ++;
+      
+      
       if(logicM1[i][k] == 5){
           // The ant found sugar
-           //JOptionPane.showMessageDialog(null, "Very good", "Sugar", JOptionPane.INFORMATION_MESSAGE);
+            if(possion > 0 && possion < 4){
+                life += 20; 
+            }
+            else{
+                life += 10; //Increase life
+                if(alcoholismLevel > 0){
+                    alcoholismLevel -=  10; //Reduce the alcoholismLevel thanks for the ant find sugar
+                }
+            }
+          
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
         }
         if(logicM1[i][k] == 10)
         {
+            alcoholismLevel = 50;
             //The ant found sugar with alchol
-           //JOptionPane.showMessageDialog(null, "Bad", "Sugar with alchol", JOptionPane.INFORMATION_MESSAGE);
+            if(possion > 0 && possion < 4){
+               JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for alcholism Level and possion!", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if(alcoholismLevel == 0){
+                 alcoholismLevel += 20; //Increase alcholism level
+                 life -= 10; 
+            }
+            else if(alcoholismLevel > 0 ){
+                   alcoholismLevel += 20;//Increase alcholism level
+                   life -= 20;
+                   uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                   //Show the image with sugar
+                   Hip();
+            }
+            if(alcoholismLevel >= 50){
+                JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for alcholism Level!", JOptionPane.INFORMATION_MESSAGE);
+                //StopGame
+            }
+          
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
         }
         if(logicM1[i][k] == 15){
-          //The ant found possion
-         //JOptionPane.showMessageDialog(null, "Bad", "Possion!!", JOptionPane.INFORMATION_MESSAGE);
+            //The and found the possion
+            if(possion > 0 ){
+                 JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for two possions!", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else if(alcoholismLevel > 0){
+                life -= 50; 
+                possion = 1; //Activation according to possion
+            }
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg"));
         }
+     
+        
        return null;
     }
 
@@ -158,6 +203,9 @@ public class AntModel implements AntOperations{
                                     return uiMatrix;
                                 } else {
                                     updateMatrix(i, k + 1, i, k, null);
+                                    if(alcoholismLevel > 0 ){
+                                        alcoholismLevel -= 10;
+                                    }
                                     winner = false;
                                     return uiMatrix;
                                 }
@@ -197,7 +245,10 @@ public class AntModel implements AntOperations{
                             }
                             else{
                             updateMatrix(i, k-1, i, k, null);
-                             passPosition = "rigth";
+                              if(alcoholismLevel > 0 )
+                                 alcoholismLevel -= 10;
+                                
+                               passPosition = "rigth";
                             return uiMatrix;
                             }
                            
@@ -236,6 +287,9 @@ public class AntModel implements AntOperations{
                                 
                             } else {
                                 updateMatrix(i - 1, k, i, k, icon);
+                                  if(alcoholismLevel > 0 )
+                                 alcoholismLevel -= 10;
+                                  
                                  passPosition = "down";
                                  return uiMatrix;
                             }
@@ -282,6 +336,10 @@ public class AntModel implements AntOperations{
                             }
                             else{
                                  updateMatrix(i+1, k, i, k, null);
+                                if (alcoholismLevel > 0) 
+                                    alcoholismLevel -= 10; //alcholism can  reduce
+                                
+
                                   passPosition = "up";
                                   return uiMatrix;
                             }
