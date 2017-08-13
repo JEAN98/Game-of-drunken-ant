@@ -1,15 +1,120 @@
 
 package View;
 
+import static View.GameOfAnt.model1;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 
 public class Settings extends javax.swing.JFrame {
 
-
+    String cadena;
     public Settings() {
         initComponents();
        
     }
+    private boolean verifyText(){
+      if(jTextFieldNickNma.getText().equals("")||jTextFieldObstacles.getText().equals(""))
+          return false;
+    
+      return true;
+    }
+    
+    public void createGame(String large,String weight,String nickName,String quantityObstacles){
+          try {
+     //Call the file
+            String dir = "C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt";
+            File file = new File(dir);
+            
+      //Object about buffer
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            bw.write("");
+            FileWriter write1=new FileWriter(file,true);
+            
+            String information="";
+            information += large;
+            information += " "+weight;
+            information +=" "+nickName;
+            information +=" "+quantityObstacles;
+            
+            write1.write(information);            
+            write1.close();
+            findInformation(dir);
+            
+         } //Si existe un problema al escribir cae aqui
+        catch (Exception e) {
+            System.out.println("Error al escribir");
+        }
+    }
+    
+    //In this method we can get the information inside of file 
+    private void findInformation(String fileDir) throws FileNotFoundException, IOException{
+   
+      FileReader f = new FileReader(fileDir);
+      BufferedReader b = new BufferedReader(f);
+      
+      //While
+      if((cadena = b.readLine())!= null) {
+          System.out.println(cadena);
+          //Line of file    
+      }
+      b.close();
+    }
+    
+    private void sendGameInformation(){
+//        String test = cadena.substring(0, getGameInformation(0));
+//        int rows =getGameInformation(0);
+    }
+    private void  getGameInformation(){
 
+       String result = "";
+       int cont = 0;
+       //Find the quantity of rows
+       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
+           result += String.valueOf(cadena.charAt(cont));
+           cont++;
+        }
+        GameOfAnt.model1.setLarge(Integer.parseInt(result));
+        cont++;
+        result = ""; //Reset the variable
+        
+        //Find the quantity of columns
+       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
+           result += String.valueOf(cadena.charAt(cont));
+           cont++;
+        }
+        GameOfAnt.model1.setWidth(Integer.parseInt(result));
+        cont++;
+        result = ""; //Reset the variable
+        
+        //Find the nickName
+       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
+           result += String.valueOf(cadena.charAt(cont));
+           cont++;
+        }
+        GameOfAnt.model1.setNickName(result);
+        cont++;
+        result = ""; //Reset the variable
+        
+         //Find the quantity of obstacles
+       while(!String.valueOf(cadena.charAt(cont)).equals(" ")){
+           result += String.valueOf(cadena.charAt(cont));
+           if(cont +1 == cadena.length()){
+               break;
+           }
+           cont++;
+        }
+        GameOfAnt.model1.setObstacleQuantity(Integer.parseInt(result));
+     
+    }
   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -57,6 +162,7 @@ public class Settings extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(236, 239, 241));
@@ -73,6 +179,11 @@ public class Settings extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Create");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         jLabel5.setText("New game");
@@ -296,12 +407,12 @@ public class Settings extends javax.swing.JFrame {
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabelPossion, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabelAlcholismLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(116, 116, 116)
+                                        .addGap(118, 118, 118)
                                         .addComponent(jLabel22))))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(489, 489, 489)
                         .addComponent(jButton2)))
-                .addContainerGap(825, Short.MAX_VALUE))
+                .addContainerGap(823, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,22 +442,25 @@ public class Settings extends javax.swing.JFrame {
                                 .addGap(37, 37, 37)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(92, 92, 92)
+                                        .addComponent(jLabelAlcholismLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(53, 53, 53)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabelPossion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabelSuarLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(64, 64, 64)
-                                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(84, 84, 84)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel22)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addComponent(jLabelAlcholismLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(53, 53, 53)
-                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabelPossion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))))))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                                .addGap(64, 64, 64)
+                                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel22)))))))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(262, 262, 262))
         );
@@ -383,6 +497,19 @@ public class Settings extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(verifyText()){
+            createGame(jComboBox2.getSelectedItem().toString(), jComboBox1.getSelectedItem().toString(), jTextFieldNickNma.getText(),jTextFieldObstacles.getText());
+            getGameInformation();
+              UI newView = new UI(model1); //13 * 18 maximun
+         newView.setVisible(true);
+      newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }    
+        else
+            JOptionPane.showMessageDialog(null, "Please, complete all spaces", "Problems!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
