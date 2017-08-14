@@ -4,6 +4,13 @@ package Model;
 import View.GameOfAnt;
 import java.applet.AudioClip;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -37,6 +44,46 @@ public class AntModel implements AntOperations{
       currentColumn = 0;
     }
 
+    public int getCurrentRow() {
+        return currentRow;
+    }
+
+    public void setCurrentRow(int currentRow) {
+        this.currentRow = currentRow;
+    }
+
+    public int getCurrentColumn() {
+        return currentColumn;
+    }
+
+    public void setCurrentColumn(int currentColumn) {
+        this.currentColumn = currentColumn;
+    }
+
+    public int getPassRow() {
+        return passRow;
+    }
+
+    public void setPassRow(int passRow) {
+        this.passRow = passRow;
+    }
+
+    public int getPassColumn() {
+        return passColumn;
+    }
+
+    public void setPassColumn(int passColumn) {
+        this.passColumn = passColumn;
+    }
+
+    public String getPassPosition() {
+        return passPosition;
+    }
+
+    public void setPassPosition(String passPosition) {
+        this.passPosition = passPosition;
+    }
+ 
     public int getLife() {
         return life;
     }
@@ -87,7 +134,7 @@ public class AntModel implements AntOperations{
     
     private ImageIcon verifyObstacles(int i, int k) {
       //Here we can verify if the current cell have something
-       
+                         
       //Verify the status of possion
        if(possion == 3 )
             possion = 0;
@@ -97,6 +144,7 @@ public class AntModel implements AntOperations{
       
       if(logicM1[i][k] == 5){
           // The ant found sugar
+          
             if(possion > 0 && possion < 4){
                 life += 20; 
             }
@@ -107,12 +155,14 @@ public class AntModel implements AntOperations{
                 }
             }
           
+
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/sugar.png"));
         }
         if(logicM1[i][k] == 10)
         {
             
             //The ant found sugar with alchol
+
             if(possion > 0 && possion < 4){
                JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for alcholism Level and possion!", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -136,17 +186,17 @@ public class AntModel implements AntOperations{
         }
         if(logicM1[i][k] == 15){
             //The and found the possion
+         //   alcoholismLevel=20;
             if(possion > 0 ){
                  JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for two possions!", JOptionPane.INFORMATION_MESSAGE);
             }
             else if(alcoholismLevel > 0){
                 life -= 50; 
                 possion = 1; //Activation according to possion
+                return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/possion.png"));
             }
-            return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/possion.png"));
+            
         }
-     
-        
        return null;
     }
 
@@ -175,6 +225,7 @@ public class AntModel implements AntOperations{
         currentColumn = currentK; // save current column
         passRow = i; //save the previous row 
         passColumn = k; //save  previous column
+        saveInformationTXT();
 
     }
 
@@ -211,6 +262,7 @@ public class AntModel implements AntOperations{
                                 }
                             } else {
                                 winner = false;
+                                sound = true;
                                 return uiMatrix;
                             }
                         }
@@ -397,5 +449,36 @@ public class AntModel implements AntOperations{
             }
         }
     }
-    
+  private void saveInformationTXT(){
+        try {
+          //Call the file
+          String dir = "C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt";
+          File file = new File(dir);
+
+          //Object about buffer
+          BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+          bw.write("");
+          FileWriter write1 = new FileWriter(file, true);
+          String information = "";
+          for (int i = 0; i < logicM1.length; i++) {
+              for (int j = 0; j < logicM1[i].length; j++) {
+                  //Here we can save the numbers of logicMatrix in the file
+                  information += String.valueOf(logicM1[i][j]);
+                  information += " ";
+              }
+          }
+          information += String.valueOf(currentRow) + " ";
+          information += String.valueOf(currentColumn) + " ";
+          write1.write(information);
+          write1.close();
+          //  findInformation(dir);
+      } //Si existe un problema al escribir cae aqui
+      catch (Exception e) {
+          System.out.println("Error al escribir");
+      }
+  }
+ 
+  private void showTheCurrentInformation(){
+      
+  }
 }

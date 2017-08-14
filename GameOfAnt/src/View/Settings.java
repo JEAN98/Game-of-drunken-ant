@@ -118,6 +118,7 @@ public class Settings extends javax.swing.JFrame {
         }
         int obstaclesQuantity = Integer.parseInt(result);
         model1 = new GameSettingsModel(nickName, rows, columns, obstaclesQuantity);
+        
     }
     
     @SuppressWarnings("unchecked")
@@ -511,6 +512,7 @@ public class Settings extends javax.swing.JFrame {
         if (verifyText()) {
             createGame(jComboBox2.getSelectedItem().toString(), jComboBox1.getSelectedItem().toString(), jTextFieldNickNma.getText(), jTextFieldObstacles.getText());
             getGameInformation();
+            model1.setGetAntInformation(false);
             UI newView = new UI(model1); //13 * 18 maximun
             newView.setVisible(true);
             newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -530,6 +532,7 @@ public class Settings extends javax.swing.JFrame {
             //Here we can to coninue our game,because the information is saved in the Settings file
             findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
             getGameInformation();
+            model1.setGetAntInformation(true);
             UI newView = new UI(model1); //13 * 18 maximun
             newView.setVisible(true);
             newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class GameSettingsModel {
 
     private String nickName;
+    private boolean antInformation;
     private int large;
     private int width;
     private int obstacleQuantity;
@@ -23,6 +24,14 @@ public class GameSettingsModel {
         this.betterScore = 0;
         this.rowHistory = new ArrayList<>();
         this.columnHistory = new ArrayList<>();
+    }
+
+    public boolean getAntInformation() {
+        return antInformation;
+    }
+
+    public void setGetAntInformation(boolean getAntInformation) {
+        this.antInformation = getAntInformation;
     }
 
     public String getNickName() {

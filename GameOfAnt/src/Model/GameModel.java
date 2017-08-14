@@ -36,6 +36,38 @@ public class GameModel {
         setObstacles(quantityObstacles);
     }
     
+    public void setCurrentLogicM1(int [][] oldLogicMatrix){
+        this.logicM1 = oldLogicMatrix;
+        creationOldMatrix();
+    }
+    //Old game
+    public void creationOldMatrix(){
+        javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
+        int x=45;//Large
+        int y = 50; //width
+       
+           for (int i = 0; i < uiMatrix.length; i++) {            
+               for (int k = 0; k < uiMatrix[i].length; k++) {
+                   
+                   uiMatrix[i][k] = new JLabel();
+                   uiMatrix[i][k].setBorder(border);                  
+                   uiMatrix[i][k].setBounds(x,y,45,50);
+                   uiMatrix[i][k].setText("");      
+                   if (logicM1[i][k] == -1) {
+                       //show ant in the current cell
+                       uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));      
+                   } 
+                   else {
+                       //The rest of the others space
+                       uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+                   }                   
+                   x+=45;
+               }
+            x = 45;
+            y += 50;
+        }
+    }
+    //New game
      private void creationOfMatrix(){
        //minimum of large is 7 and Maximiun 13 of large
        //Maximiun of width is 7 and Maximiun 18 of width

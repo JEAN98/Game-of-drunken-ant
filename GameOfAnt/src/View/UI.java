@@ -14,7 +14,13 @@ import java.awt.Label;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import java.applet.AudioClip;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.text.html.parser.DTDConstants;
@@ -42,7 +48,7 @@ public class UI extends javax.swing.JFrame {
     
  
     
-    public UI(GameSettingsModel model) {
+    public UI(GameSettingsModel model) throws IOException {
         this.randomRows = new ArrayList();
         initComponents();
    //  uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
@@ -173,20 +179,91 @@ public class UI extends javax.swing.JFrame {
       sound.play();
     }
    
-    private void creationMatrixByModel(){
+    private void creationMatrixByModel() throws IOException{
     //Here we are going to send the information about 
     //large and width that matrix is going to have
         gameModel = new GameModel(gameSettings.getLarge(),gameSettings.getWidth());
         gameModel.setUiMatrix();
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
-        antCreation();
-        showMatrix();
+        if(gameSettings.getAntInformation()){
+             continueAntGame();
+        }
+        else{
+            antCreation();
+            showMatrix();
+        }
+        
         
     } 
+    
+    private void continueAntGame() throws IOException{
+          getInformationTXT(0);
+        
+    }
+    private void getInformationTXT(int line)throws FileNotFoundException, IOException {
+        
+        FileReader f = new FileReader("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt");
+        BufferedReader b = new BufferedReader(f);
+        String fileInformation="";
+        int cont = 0;
+        //While
+        while ((fileInformation = b.readLine()) != null) {
+            
+            if( line == 0){
+                for (int i = 0; i < logicM1.length; i++) {
+                    for (int j = 0; j < logicM1[i].length; j++) {
+                        //Here we can save the numbers of logicMatrix in the file
+                        String number ="";
+                        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                            number += String.valueOf(fileInformation.charAt(cont));
+                            cont++;
+                        }
+                        logicM1[i][j] = Integer.parseInt(number);
+                        cont++;
+                    }
+                }
+                //Creation about Ant class
+                ant = new AntModel(gameModel.getUiMatrix(), logicM1);
+                //Send currentPositions
+                setCurrentsPositions(fileInformation, cont);
+            }
+            else{
+              
+                  
+            }
+            //Line of file    
+        }
+        b.close();
+    } 
+    private void setCurrentsPositions(String fileInformation,int cont){
+        //Here we can send the information about the current possitions 
+        boolean bus = true;
+        while (bus || !bus) {
+         
+            String number = "";
+            while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                number += String.valueOf(fileInformation.charAt(cont));
+                cont++;
+            }
+            //verify for to get the row
+            if (bus) //Set the currentRow in the ant object
+                ant.setCurrentRow(Integer.parseInt(number)); 
+            
+            else//Set the currentColumn in the ant object{
+            {
+                  ant.setCurrentColumn(Integer.parseInt(number));
+                  return; //Ready
+            }
+            cont++;
+            bus=false;            
+        }
+    }
+               
     
     private void antCreation(){
         //Creation of Ant with uiMatrix and  logicm1
         ant = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
+        
     }
     private void showMatrix()
     {
@@ -253,7 +330,11 @@ public class UI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UI(null).setVisible(true);
+                try {
+                    new UI(null).setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
