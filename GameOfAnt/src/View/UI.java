@@ -201,68 +201,7 @@ public class UI extends javax.swing.JFrame {
         showMatrix(GameOfAnt.gameObject.getUiMatrix());
         
     }
-    private void getInformationTXT(int line)throws FileNotFoundException, IOException {
-        
-        FileReader f = new FileReader("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt");
-        BufferedReader b = new BufferedReader(f);
-        String fileInformation="";
-        int cont = 0;
-        //While
-        while ((fileInformation = b.readLine()) != null) {
-            
-            if( line == 0){
-                for (int i = 0; i < logicM1.length; i++) {
-                    for (int j = 0; j < logicM1[i].length; j++) {
-                        //Here we can save the numbers of logicMatrix in the file
-                        String number ="";
-                        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-                            number += String.valueOf(fileInformation.charAt(cont));
-                            cont++;
-                        }
-                        logicM1[i][j] = Integer.parseInt(number);
-                        cont++;
-                    }
-                }
-                //Creation about Ant class
-                gameModel.setCurrentLogicM1(logicM1);
-                ant = new AntModel(gameModel.getUiMatrix(), logicM1);
-              
-                //Send currentPositions
-                setCurrentsPositions(fileInformation, cont);
-            }
-            else{
-              
-                  
-            }
-            //Line of file    
-        }
-        b.close();
-    } 
-    private void setCurrentsPositions(String fileInformation,int cont){
-        //Here we can send the information about the current possitions 
-        boolean bus = true;
-        while (bus || !bus) {
-         
-            String number = "";
-            while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-                number += String.valueOf(fileInformation.charAt(cont));
-                cont++;
-            }
-            //verify for to get the row
-            if (bus) //Set the currentRow in the ant object
-                ant.setCurrentRow(Integer.parseInt(number)); 
-            
-            else//Set the currentColumn in the ant object{
-            {
-                  ant.setCurrentColumn(Integer.parseInt(number));
-                  return; //Ready
-            }
-            cont++;
-            bus=false;            
-        }
-    }
-               
-    
+  
     private void antCreation(){
         //Creation of Ant with uiMatrix and  logicm1
         GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
