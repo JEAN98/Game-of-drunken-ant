@@ -42,6 +42,7 @@ public class AntModel implements AntOperations{
       this.life = 100;
       currentRow = 0;
       currentColumn = 0;
+      saveInformationTXT();
     }
 
     public int getCurrentRow() {

@@ -8,6 +8,7 @@ package View;
 import Model.AntModel;
 import Model.GameModel;
 import Model.GameSettingsModel;
+import static View.GameOfAnt.antObject;
 import javax.swing.JLabel; import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Label;
@@ -52,7 +53,7 @@ public class UI extends javax.swing.JFrame {
         this.randomRows = new ArrayList();
         initComponents();
    //  uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
-      logicM1 = new int[model.getLarge()][model.getWidth()];
+        logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
         creationMatrixByModel();
        // creationOfMatrix();
@@ -125,11 +126,11 @@ public class UI extends javax.swing.JFrame {
            
        if (evt.getKeyCode() == 39) 
        {
-           uiMatrix = ant.MoveRight();
-           if(ant.getSound())
+           uiMatrix = antObject.MoveRight();
+           if( antObject.getSound())
                soundEvent();
            
-           if(ant.getWinner()){
+           if(antObject.getWinner()){
                JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
                fin.setVisible(true);
            }
@@ -138,19 +139,19 @@ public class UI extends javax.swing.JFrame {
 
        else if(evt.getKeyCode() == 37)
        {
-           uiMatrix = ant.MoveLeft();
-            if(ant.getSound())
+           uiMatrix = antObject.MoveLeft();
+            if(antObject.getSound())
                soundEvent();
            // moveLeft();//key left pressed
        }
        
        else if (evt.getKeyCode() == 40)
        {
-           uiMatrix = ant.MoveDown();
-          if(ant.getSound())
+           uiMatrix = antObject.MoveDown();
+          if(antObject.getSound())
                soundEvent();
            
-           if(ant.getWinner()){
+           if(antObject.getWinner()){
               JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
             //moveDown();//key down pressed
             fin.setVisible(true);
@@ -158,12 +159,12 @@ public class UI extends javax.swing.JFrame {
        }
         
        else if(evt.getKeyCode() == 38){
-           uiMatrix = ant.MoveUp();
-           if(ant.getSound())
+           uiMatrix = antObject.MoveUp();
+           if(antObject.getSound())
                soundEvent();
            // moveUp(); //key up pressed
        }
-       jLabel2.setText(String.valueOf(ant.getStepsbyAnt()));
+       jLabel2.setText(String.valueOf(antObject.getStepsbyAnt()));
        showMovement();
     }//GEN-LAST:event_formKeyPressed
 
@@ -185,19 +186,19 @@ public class UI extends javax.swing.JFrame {
         gameModel = new GameModel(gameSettings.getLarge(),gameSettings.getWidth());
         gameModel.setUiMatrix();
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
-        if(gameSettings.getAntInformation()){
-             continueAntGame();
+        if (gameSettings.getAntInformation()){
+            showMatrix(GameOfAnt.gameObject.getUiMatrix());
         }
-        else{
-            antCreation();
-            showMatrix();
+           
+        else {
+            antCreation(); // here we can play with new game
+            showMatrix(gameModel.getUiMatrix());
         }
-        
-        
+          
     } 
     
     private void continueAntGame() throws IOException{
-          getInformationTXT(0);
+        showMatrix(GameOfAnt.gameObject.getUiMatrix());
         
     }
     private void getInformationTXT(int line)throws FileNotFoundException, IOException {
@@ -223,7 +224,9 @@ public class UI extends javax.swing.JFrame {
                     }
                 }
                 //Creation about Ant class
+                gameModel.setCurrentLogicM1(logicM1);
                 ant = new AntModel(gameModel.getUiMatrix(), logicM1);
+              
                 //Send currentPositions
                 setCurrentsPositions(fileInformation, cont);
             }
@@ -262,16 +265,16 @@ public class UI extends javax.swing.JFrame {
     
     private void antCreation(){
         //Creation of Ant with uiMatrix and  logicm1
-        ant = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
+        GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
         
     }
-    private void showMatrix()
+    private void showMatrix(JLabel[][] matrixGraphic)
     {
        //Here we are going to show the matrix that we created in the class
        javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
         int x=45;//Large
         int y = 50; //width
-        uiMatrix = gameModel.getUiMatrix();
+        uiMatrix = matrixGraphic;
       //  logicM1 = gameModel.getLogicM1();
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {
@@ -293,11 +296,11 @@ public class UI extends javax.swing.JFrame {
    
     private void showMovement(){
      //Here we can show the current matrix the recent movement
-      uiMatrix = ant.getUiMatrix();
+      uiMatrix = antObject.getUiMatrix();
           for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {
                  jLabel1.add(uiMatrix[i][j],null);
-                 if(ant.getLogicM1()[i][j] == -1)
+                 if(antObject.getLogicM1()[i][j] == -1)
                       return;
             }
         }

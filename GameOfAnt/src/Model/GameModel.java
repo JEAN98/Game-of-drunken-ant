@@ -104,7 +104,7 @@ public class GameModel {
 
                 if (i == 0 && k == 0) {
                     logicM1[i][k] = -1; //Current position of Ant( image of Ant)
-                } else if (i == uiMatrix.length - 1 && k == uiMatrix[i].length - 1) {
+                } else if (i == logicM1.length - 1 && k == logicM1[i].length - 1) {
                     logicM1[i][k] = -2; //End cell  (Image of colony)
                     //End space
                 } 

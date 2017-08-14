@@ -1,6 +1,9 @@
 package View;
 
+import Model.AntModel;
+import Model.GameModel;
 import Model.GameSettingsModel;
+import static View.GameOfAnt.gameObject;
 import static View.GameOfAnt.model1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,9 +22,10 @@ public class Settings extends javax.swing.JFrame {
     
     String fileInformation;
 
-    public Settings() {
+    public Settings() throws IOException {
         initComponents();
-        
+        findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
+        getGameInformation();
     }
 
     private boolean verifyText() {
@@ -72,12 +76,8 @@ public class Settings extends javax.swing.JFrame {
         b.close();
     }
     
-    private void sendGameInformation() {
-//        String test = cadena.substring(0, getGameInformation(0));
-//        int rows =getGameInformation(0);
-    }
 
-    private void getGameInformation() {
+    private void getGameInformation() throws IOException {
         
         String result = "";
         int cont = 0;
@@ -117,10 +117,75 @@ public class Settings extends javax.swing.JFrame {
             cont++;
         }
         int obstaclesQuantity = Integer.parseInt(result);
-        model1 = new GameSettingsModel(nickName, rows, columns, obstaclesQuantity);
         
+        model1 = new GameSettingsModel(nickName, rows, columns, obstaclesQuantity);
+        gameObject = new GameModel(rows, columns);
+        gameObject.setUiMatrix();
+        gameObject.setLogicM1(obstaclesQuantity);
+        getInformationTXT(0);
     }
     
+    private void getInformationTXT(int line)throws FileNotFoundException, IOException {
+        
+        FileReader f = new FileReader("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt");
+        BufferedReader b = new BufferedReader(f);
+        String fileInformation="";
+        int[][] logicM1 = new int[model1.getLarge()][model1.getWidth()];
+        int cont = 0;
+        //While
+        while ((fileInformation = b.readLine()) != null) {
+            
+            if( line == 0){
+                for (int i = 0; i < logicM1.length; i++) {
+                    for (int j = 0; j < logicM1[i].length; j++) {
+                        //Here we can save the numbers of logicMatrix in the file
+                        String number ="";
+                        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                            number += String.valueOf(fileInformation.charAt(cont));
+                            cont++;
+                        }
+                        logicM1[i][j] = Integer.parseInt(number);
+                        cont++;
+                    }
+                }
+                //Creation about Ant class
+                gameObject.setCurrentLogicM1(logicM1);
+                GameOfAnt.antObject = new AntModel(gameObject.getUiMatrix(), logicM1);
+              
+                //Send currentPositions
+                setCurrentsPositions(fileInformation, cont);
+            }
+            else{
+              
+                  
+            }
+            //Line of file    
+        }
+        b.close();
+    } 
+     private void setCurrentsPositions(String fileInformation,int cont){
+        //Here we can send the information about the current possitions 
+        boolean bus = true;
+        while (bus || !bus) {
+         
+            String number = "";
+            while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                number += String.valueOf(fileInformation.charAt(cont));
+                cont++;
+            }
+            //verify for to get the row
+            if (bus) //Set the currentRow in the ant object
+                GameOfAnt.antObject.setCurrentRow(Integer.parseInt(number)); 
+            
+            else//Set the currentColumn in the ant object{
+            {
+                  GameOfAnt.antObject.setCurrentColumn(Integer.parseInt(number));
+                  return; //Ready
+            }
+            cont++;
+            bus=false;            
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -511,13 +576,21 @@ public class Settings extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (verifyText()) {
             createGame(jComboBox2.getSelectedItem().toString(), jComboBox1.getSelectedItem().toString(), jTextFieldNickNma.getText(), jTextFieldObstacles.getText());
-            getGameInformation();
+            try {
+                getGameInformation();
+            } catch (IOException ex) {
+                Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+            }
             model1.setGetAntInformation(false);
-            UI newView = new UI(model1); //13 * 18 maximun
-            newView.setVisible(true);
-            newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            
+            UI newView;
+            try {
+                newView = new UI(model1); //13 * 18 maximun
+                newView.setVisible(true);
+                newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            } catch (IOException ex) {
+                Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please, complete all spaces", "Problems!", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -530,8 +603,7 @@ public class Settings extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             //Here we can to coninue our game,because the information is saved in the Settings file
-            findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
-            getGameInformation();
+         
             model1.setGetAntInformation(true);
             UI newView = new UI(model1); //13 * 18 maximun
             newView.setVisible(true);
@@ -571,7 +643,11 @@ public class Settings extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Settings().setVisible(true);
+                try {
+                    new Settings().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
