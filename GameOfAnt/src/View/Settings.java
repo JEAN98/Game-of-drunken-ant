@@ -20,12 +20,15 @@ import javax.swing.JOptionPane;
 
 public class Settings extends javax.swing.JFrame {
     
-    String fileInformation;
-
+    String fileInformation="";
+    String currentFile="" ;
+    int contInformation = 0;
     public Settings() throws IOException {
         initComponents();
         findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
         getGameInformation();
+        showAntAttributes();
+       
     }
 
     private boolean verifyText() {
@@ -77,14 +80,15 @@ public class Settings extends javax.swing.JFrame {
     }
     
 
-    private void getGameInformation() throws IOException {
-        
+    private boolean getGameInformation() throws IOException {
+       boolean bus = false;
         String result = "";
         int cont = 0;
         //Find the quantity of rows
         while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
             result += String.valueOf(fileInformation.charAt(cont));
             cont++;
+            bus= true;
         }
         int rows = Integer.parseInt(result);
         cont++;
@@ -122,26 +126,27 @@ public class Settings extends javax.swing.JFrame {
         gameObject = new GameModel(rows, columns);
         gameObject.setUiMatrix();
         gameObject.setLogicM1(obstaclesQuantity);
-        getInformationTXT(0);
+        getInformationTXT();
+        return bus;
     }
     
-    private void getInformationTXT(int line)throws FileNotFoundException, IOException {
+    private void getInformationTXT()throws FileNotFoundException, IOException {
         
         FileReader f = new FileReader("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt");
         BufferedReader b = new BufferedReader(f);
-        String fileInformation="";
+        String fileInformation1="";
         int[][] logicM1 = new int[model1.getLarge()][model1.getWidth()];
         int cont = 0;
         //While
-        while ((fileInformation = b.readLine()) != null) {
+        while ((fileInformation1 = b.readLine()) != null) {
             
-            if( line == 0){
+           
                 for (int i = 0; i < logicM1.length; i++) {
                     for (int j = 0; j < logicM1[i].length; j++) {
                         //Here we can save the numbers of logicMatrix in the file
                         String number ="";
-                        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-                            number += String.valueOf(fileInformation.charAt(cont));
+                        while (!String.valueOf(fileInformation1.charAt(cont)).equals(" ")) {
+                            number += String.valueOf(fileInformation1.charAt(cont));
                             cont++;
                         }
                         logicM1[i][j] = Integer.parseInt(number);
@@ -153,17 +158,47 @@ public class Settings extends javax.swing.JFrame {
                 GameOfAnt.antObject = new AntModel(gameObject.getUiMatrix(), logicM1);
               
                 //Send currentPositions
-                setCurrentsPositions(fileInformation, cont);
-            }
-            else{
-              
-                  
-            }
+              cont = setCurrentsPositions(fileInformation1, cont);
+              currentFile = fileInformation1;
+              saveAntAttributes(cont);
             //Line of file    
         }
         b.close();
     } 
-     private void setCurrentsPositions(String fileInformation,int cont){
+    private String getAntAttributes(){
+        //Get information of each attribute, little by little
+          String number="";
+          while (!String.valueOf(currentFile.charAt(contInformation)).equals(" ")) {
+                 if (contInformation + 1 == fileInformation.length()) {
+                break;
+            }
+        
+            number += String.valueOf(currentFile.charAt(contInformation));
+            contInformation++;
+        }
+          contInformation++;
+          return number;
+    }
+    private void saveAntAttributes(int cont){
+        //Here we can getting the current: life, alcholismLevel,SugarLevel,PossionLevel,Steps
+        contInformation = cont;
+     
+         //life Found it
+         GameOfAnt.antObject.setLife(Integer.parseInt(getAntAttributes()));
+        
+        //Sugar found it
+        GameOfAnt.antObject.setSugarLevel(Integer.parseInt(getAntAttributes()));
+        
+       //Alcholism found it
+        GameOfAnt.antObject.setAlcoholismLevel(Integer.parseInt(getAntAttributes()));
+        
+       //Possion found it
+        GameOfAnt.antObject.setPossion(Integer.parseInt(getAntAttributes()));
+        
+       //Steps found it
+        GameOfAnt.antObject.setStepsbyAnt(Integer.parseInt(getAntAttributes()));
+    }
+     private int setCurrentsPositions(String fileInformation,int cont){
         //Here we can send the information about the current possitions 
         boolean bus = true;
         while (bus || !bus) {
@@ -180,12 +215,27 @@ public class Settings extends javax.swing.JFrame {
             else//Set the currentColumn in the ant object{
             {
                   GameOfAnt.antObject.setCurrentColumn(Integer.parseInt(number));
-                  return; //Ready
+//                  number ="";
+//                   while (cont < fileInformation.length()) {
+//                number += String.valueOf(fileInformation.charAt(cont));
+//                cont++;
+//            }
+                
+                  return cont+1; //Ready
             }
             cont++;
             bus=false;            
         }
+        return 0;
     }
+     
+    private void showAntAttributes(){
+        jLabelCurrentLife.setText(String.valueOf(GameOfAnt.antObject.getLife()));
+        jLabelSuarLevel.setText(String.valueOf(GameOfAnt.antObject.getSugarLevel()));
+        jLabelAlcholismLevel.setText(String.valueOf(GameOfAnt.antObject.getAlcoholismLevel()));
+        jLabelPossion.setText(String.valueOf(GameOfAnt.antObject.getPossion()));
+        jLabelSteps.setText(String.valueOf(GameOfAnt.antObject.getStepsbyAnt()));
+    } 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

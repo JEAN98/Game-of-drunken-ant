@@ -42,7 +42,11 @@ public class AntModel implements AntOperations{
       this.life = 100;
       currentRow = 0;
       currentColumn = 0;
-      saveInformationTXT();
+      this.alcoholismLevel = 0;
+      this.possion = 0;
+      this.stepsbyAnt = 0;
+      this.sugarLevel = 0;
+     
     }
 
     public int getCurrentRow() {
@@ -64,6 +68,15 @@ public class AntModel implements AntOperations{
     public int getPassRow() {
         return passRow;
     }
+
+    public int getPossion() {
+        return possion;
+    }
+
+    public void setPossion(int possion) {
+        this.possion = possion;
+    }
+    
 
     public void setPassRow(int passRow) {
         this.passRow = passRow;
@@ -450,6 +463,18 @@ public class AntModel implements AntOperations{
             }
         }
     }
+    
+  private void saveAntAttributes(  FileWriter write1) throws IOException{
+      //Here we can save the other attributes according to movements of ant
+      
+      String information="";
+      information += String.valueOf(life) +" ";
+      information += String.valueOf(sugarLevel) +" ";
+      information += String.valueOf(alcoholismLevel) +" ";
+      information += String.valueOf(possion) +" ";
+      information += String.valueOf(stepsbyAnt) +" ";
+      write1.write(information);
+  }
   private void saveInformationTXT(){
         try {
           //Call the file
@@ -471,6 +496,8 @@ public class AntModel implements AntOperations{
           information += String.valueOf(currentRow) + " ";
           information += String.valueOf(currentColumn) + " ";
           write1.write(information);
+          
+          saveAntAttributes(write1);
           write1.close();
           //  findInformation(dir);
       } //Si existe un problema al escribir cae aqui
@@ -478,8 +505,5 @@ public class AntModel implements AntOperations{
           System.out.println("Error al escribir");
       }
   }
- 
-  private void showTheCurrentInformation(){
-      
-  }
+
 }
