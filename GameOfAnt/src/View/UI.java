@@ -45,19 +45,15 @@ public class UI extends javax.swing.JFrame {
     int sugarWineCont = 0;
     int possionContn = 0;
     ArrayList<Integer> randomRows;
-    AntModel ant;
-    
- 
     
     public UI(GameSettingsModel model) throws IOException {
         this.randomRows = new ArrayList();
         initComponents();
-   //  uiMatrix = new JLabel[model.getLarge()][model.getWidth()];
         logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
         creationMatrixByModel();
-       // creationOfMatrix();
-        //creationOfLogicMatrix();
+        showInformationAboutAnt();
+        jLabelx.setVisible(true);
        
     }   JLabel fin = new JLabel();
 
@@ -67,9 +63,17 @@ public class UI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabeHip = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabelLife1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabelx = new javax.swing.JLabel();
+        jLabelBadGround = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -92,31 +96,71 @@ public class UI extends javax.swing.JFrame {
         });
         getContentPane().setLayout(null);
 
+        jPanel2.setLayout(null);
+
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel2.setText("jLabel2");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(940, 20, 110, 50);
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Hip:");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(1000, 180, 50, 50);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg"))); // NOI18N
+        jLabeHip.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabeHip.setForeground(new java.awt.Color(255, 255, 255));
+        jLabeHip.setText("Desactive");
+        jPanel2.add(jLabeHip);
+        jLabeHip.setBounds(1090, 180, 110, 50);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1180, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Steps:");
+        jPanel2.add(jLabel3);
+        jLabel3.setBounds(990, 60, 110, 50);
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("0");
+        jPanel2.add(jLabel5);
+        jLabel5.setBounds(1100, 60, 60, 50);
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Life:");
+        jPanel2.add(jLabel4);
+        jLabel4.setBounds(1000, 120, 50, 50);
+
+        jLabelLife1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabelLife1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelLife1.setText("100");
+        jPanel2.add(jLabelLife1);
+        jLabelLife1.setBounds(1100, 120, 110, 50);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/return.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel1);
+        jLabel1.setBounds(0, 0, 50, 50);
+
+        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("jLabel7");
+        jPanel2.add(jLabel7);
+        jLabel7.setBounds(1040, 290, 34, 14);
+
+        jLabelx.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/close-button.png"))); // NOI18N
+        jPanel2.add(jLabelx);
+        jLabelx.setBounds(1240, 0, 50, 47);
+
+        jLabelBadGround.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg"))); // NOI18N
+        jLabelBadGround.setText("jLabel9");
+        jPanel2.add(jLabelBadGround);
+        jLabelBadGround.setBounds(-10, -10, 1340, 1190);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 0, 1330, 1180);
+        jPanel2.setBounds(0, 0, 1360, 1190);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -168,6 +212,21 @@ public class UI extends javax.swing.JFrame {
        showMovement();
     }//GEN-LAST:event_formKeyPressed
 
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        try {
+            Settings x = new Settings();
+            x.setVisible(true);
+            x.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            x.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            this.hide();
+        } catch (IOException ex) {
+            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jLabel1MouseClicked
+  private void showInformationAboutAnt(){
+      jLabel2.setText(String.valueOf(antObject.getStepsbyAnt()));
+  }
    private void showGarden(){
        ImageIcon fond = new ImageIcon(new ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg")).getImage());
    }
@@ -224,9 +283,9 @@ public class UI extends javax.swing.JFrame {
                        fin.setBorder(border); 
                        fin.setVisible(false);
                        fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
-                       jLabel1.add(fin,null);
+                       jLabelBadGround.add(fin,null);
                    } 
-                 jLabel1.add(uiMatrix[i][j],null);
+                 jLabelBadGround.add(uiMatrix[i][j],null);
             }
              x = 45;
             y += 50;
@@ -238,7 +297,7 @@ public class UI extends javax.swing.JFrame {
       uiMatrix = antObject.getUiMatrix();
           for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {
-                 jLabel1.add(uiMatrix[i][j],null);
+                 jLabelBadGround.add(uiMatrix[i][j],null);
                  if(antObject.getLogicM1()[i][j] == -1)
                       return;
             }
@@ -285,8 +344,16 @@ public class UI extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabeHip;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelBadGround;
+    private javax.swing.JLabel jLabelLife1;
+    private javax.swing.JLabel jLabelx;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
