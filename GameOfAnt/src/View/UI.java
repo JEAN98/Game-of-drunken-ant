@@ -9,6 +9,7 @@ import Model.AntModel;
 import Model.GameModel;
 import Model.GameSettingsModel;
 import static View.GameOfAnt.antObject;
+import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion;
 import javax.swing.JLabel; import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Label;
@@ -23,7 +24,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.text.html.parser.DTDConstants;
 
 
@@ -54,7 +57,8 @@ public class UI extends javax.swing.JFrame {
         creationMatrixByModel();
         showInformationAboutAnt();
         jLabelx.setVisible(true);
-       
+        jLabelLife1.setText(String.valueOf(antObject.getLife()));
+        jLabel7.setText("Game over");
     }   JLabel fin = new JLabel();
 
  
@@ -144,13 +148,19 @@ public class UI extends javax.swing.JFrame {
         jLabel1.setBounds(0, 0, 50, 50);
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("jLabel7");
+        jLabel7.setText("NickName");
         jPanel2.add(jLabel7);
-        jLabel7.setBounds(1040, 290, 34, 14);
+        jLabel7.setBounds(1010, 260, 210, 30);
 
         jLabelx.setForeground(new java.awt.Color(255, 255, 255));
         jLabelx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/close-button.png"))); // NOI18N
+        jLabelx.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelxMouseClicked(evt);
+            }
+        });
         jPanel2.add(jLabelx);
         jLabelx.setBounds(1240, 0, 50, 47);
 
@@ -177,6 +187,11 @@ public class UI extends javax.swing.JFrame {
            if(antObject.getWinner()){
                JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
                fin.setVisible(true);
+               try {
+                   showMessage();
+               } catch (IOException ex) {
+                   Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+               }
            }
            //  moveRight();//key rigth pressed
        }
@@ -199,6 +214,11 @@ public class UI extends javax.swing.JFrame {
               JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
             //moveDown();//key down pressed
             fin.setVisible(true);
+               try {
+                   showMessage();
+               } catch (IOException ex) {
+                   Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+               }
            }   
        }
         
@@ -208,7 +228,11 @@ public class UI extends javax.swing.JFrame {
                soundEvent();
            // moveUp(); //key up pressed
        }
-       jLabel2.setText(String.valueOf(antObject.getStepsbyAnt()));
+       if(antObject.getLoser()){
+           jLabel7.setText("Game over");
+           return;
+       }
+       jLabel5.setText(String.valueOf(antObject.getStepsbyAnt()));
        showMovement();
     }//GEN-LAST:event_formKeyPressed
 
@@ -224,8 +248,40 @@ public class UI extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jLabel1MouseClicked
+    public void showMessage() throws IOException{
+        JTextField topicTitle = new JTextField();
+        JTextField topicDesc = new JTextField();
+        Object[] message = {"Would you like to play again with the same matrix?"};
+
+        JOptionPane pane = new JOptionPane(message, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JDialog getTopicDialog = pane.createDialog(null, "Play");
+        getTopicDialog.setVisible(true);
+        
+        int value = ((Integer)pane.getValue()).intValue();
+        if (value == JOptionPane.YES_OPTION) {
+            //here we can play again with the same matrix
+            System.out.println("Good");
+            gameModel = new GameModel(gameSettings.getLarge(), gameSettings.getWidth());
+            gameModel.setUiMatrix();
+            gameModel.setLogicM1(gameSettings.getObstacleQuantity());
+
+            antCreation(); // here we can play with new game
+            showMatrix(gameModel.getUiMatrix());
+          
+            
+            creationMatrixByModel();
+        
+        } else{
+            this.hide();
+            Settings x = new Settings();
+            x.setVisible(true);
+        }
+    }
+    private void jLabelxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelxMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabelxMouseClicked
   private void showInformationAboutAnt(){
-      jLabel2.setText(String.valueOf(antObject.getStepsbyAnt()));
+      jLabel5.setText(String.valueOf(antObject.getStepsbyAnt()));
   }
    private void showGarden(){
        ImageIcon fond = new ImageIcon(new ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg")).getImage());
@@ -256,11 +312,7 @@ public class UI extends javax.swing.JFrame {
           
     } 
     
-    private void continueAntGame() throws IOException{
-        showMatrix(GameOfAnt.gameObject.getUiMatrix());
-        
-    }
-  
+      
     private void antCreation(){
         //Creation of Ant with uiMatrix and  logicm1
         GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
@@ -287,13 +339,15 @@ public class UI extends javax.swing.JFrame {
                    } 
                  jLabelBadGround.add(uiMatrix[i][j],null);
             }
-             x = 45;
+
+            x = 45;
             y += 50;
         }
     }     
    
     private void showMovement(){
      //Here we can show the current matrix the recent movement
+     jLabelLife1.setText(String.valueOf(antObject.getLife()));
       uiMatrix = antObject.getUiMatrix();
           for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {

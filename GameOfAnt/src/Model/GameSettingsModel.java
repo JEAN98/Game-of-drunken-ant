@@ -27,7 +27,7 @@ public class GameSettingsModel {
     }
 
     public boolean getAntInformation() {
-        return antInformation;
+        return antInformation; //use the current matrix
     }
 
     public void setGetAntInformation(boolean getAntInformation) {

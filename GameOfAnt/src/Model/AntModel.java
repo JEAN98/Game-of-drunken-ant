@@ -35,6 +35,7 @@ public class AntModel implements AntOperations{
     private String passPosition;
     private boolean sound;
     private boolean winner;
+    private boolean loser;
 
     public AntModel(JLabel[][] uiMatrix,int [][] logicM1) {
       this.logicM1 = logicM1;
@@ -46,7 +47,12 @@ public class AntModel implements AntOperations{
       this.possion = 0;
       this.stepsbyAnt = 0;
       this.sugarLevel = 0;
-     
+      this.loser = false;
+      saveInformationTXT();
+    }
+
+    public boolean getLoser() {
+        return loser;
     }
 
     public int getCurrentRow() {
@@ -192,7 +198,8 @@ public class AntModel implements AntOperations{
                    Hip();
             }
             if(alcoholismLevel >= 50){
-                JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for alcholism Level!", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Game over!", "The ant is dead for alcholism Level!", JOptionPane.INFORMATION_MESSAGE);
+                this.loser = true;
                 //StopGame
             }
           
@@ -202,7 +209,8 @@ public class AntModel implements AntOperations{
             //The and found the possion
          //   alcoholismLevel=20;
             if(possion > 0 ){
-                 JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for two possions!", JOptionPane.INFORMATION_MESSAGE);
+                 JOptionPane.showMessageDialog(null, "Game over!", "The ant is dead for two possions!", JOptionPane.INFORMATION_MESSAGE);
+                 
             }
             else if(alcoholismLevel > 0){
                 life -= 50; 

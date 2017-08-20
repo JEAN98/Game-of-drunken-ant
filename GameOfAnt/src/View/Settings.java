@@ -282,6 +282,7 @@ public class Settings extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jLabelCurrentLife1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -622,6 +623,14 @@ public class Settings extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Welcome to  Ants drunk");
 
+        jLabelCurrentLife1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabelCurrentLife1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/close-button.png"))); // NOI18N
+        jLabelCurrentLife1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelCurrentLife1MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -629,13 +638,17 @@ public class Settings extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(481, 481, 481)
                 .addComponent(jLabel2)
-                .addContainerGap(1411, Short.MAX_VALUE))
+                .addGap(53, 53, 53)
+                .addComponent(jLabelCurrentLife1)
+                .addContainerGap(1312, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelCurrentLife1)
+                    .addComponent(jLabel2))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1);
@@ -687,6 +700,10 @@ public class Settings extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jLabelCurrentLife1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelCurrentLife1MouseClicked
+        
+    }//GEN-LAST:event_jLabelCurrentLife1MouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -753,6 +770,7 @@ public class Settings extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelAlcholismLevel;
     private javax.swing.JLabel jLabelCurrentLife;
+    private javax.swing.JLabel jLabelCurrentLife1;
     private javax.swing.JLabel jLabelPossion;
     private javax.swing.JLabel jLabelSteps;
     private javax.swing.JLabel jLabelSuarLevel;
