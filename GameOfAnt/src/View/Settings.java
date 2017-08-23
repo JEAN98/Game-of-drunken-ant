@@ -155,7 +155,7 @@ public class Settings extends javax.swing.JFrame {
                 }
                 //Creation about Ant class
                 gameObject.setCurrentLogicM1(logicM1);
-                GameOfAnt.antObject = new AntModel(gameObject.getUiMatrix(), logicM1);
+                GameOfAnt.antObject = new AntModel(gameObject.getUiMatrix(), logicM1,false);
               
                 //Send currentPositions
               cont = setCurrentsPositions(fileInformation1, cont);
@@ -638,21 +638,23 @@ public class Settings extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(481, 481, 481)
                 .addComponent(jLabel2)
-                .addGap(53, 53, 53)
+                .addGap(39, 39, 39)
                 .addComponent(jLabelCurrentLife1)
-                .addContainerGap(1312, Short.MAX_VALUE))
+                .addContainerGap(1326, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelCurrentLife1)
-                    .addComponent(jLabel2))
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(5, 5, 5)
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelCurrentLife1))
         );
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 2237, 50);
+        jPanel1.setBounds(0, 0, 2237, 58);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

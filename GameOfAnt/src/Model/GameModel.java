@@ -57,10 +57,13 @@ public class GameModel {
                        //show ant in the current cell
                        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));      
                    } 
-                   else {
-                       //The rest of the others space
+                   else if(logicM1[i][k] == 105){
+                       //The space the ant had passed 
+                       uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
+                   }  
+                   else //The rest of the others space
                        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
-                   }                   
+                   
                    x+=45;
                }
             x = 45;

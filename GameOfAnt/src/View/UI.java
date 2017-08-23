@@ -41,7 +41,7 @@ public class UI extends javax.swing.JFrame {
     //Key Up 38;    //Key left  37;     //Key Right 39;    // Key Down 40;
     
     JLabel [][] uiMatrix;
-   int [][] logicM1;
+    int [][] logicM1;
     GameSettingsModel gameSettings;
     GameModel gameModel;
     int sugarCont = 0;
@@ -58,7 +58,7 @@ public class UI extends javax.swing.JFrame {
         showInformationAboutAnt();
         jLabelx.setVisible(true);
         jLabelLife1.setText(String.valueOf(antObject.getLife()));
-        jLabel7.setText("Game over");
+        jLabel7.setText(gameSettings.getNickName());
     }   JLabel fin = new JLabel();
 
  
@@ -315,7 +315,7 @@ public class UI extends javax.swing.JFrame {
       
     private void antCreation(){
         //Creation of Ant with uiMatrix and  logicm1
-        GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1());
+        GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1(),false);
         
     }
     private void showMatrix(JLabel[][] matrixGraphic)
@@ -337,6 +337,8 @@ public class UI extends javax.swing.JFrame {
                        fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
                        jLabelBadGround.add(fin,null);
                    } 
+                 if(logicM1[i][j] == 105)
+                    uiMatrix[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
                  jLabelBadGround.add(uiMatrix[i][j],null);
             }
 
@@ -349,11 +351,16 @@ public class UI extends javax.swing.JFrame {
      //Here we can show the current matrix the recent movement
      jLabelLife1.setText(String.valueOf(antObject.getLife()));
       uiMatrix = antObject.getUiMatrix();
+      logicM1 = antObject.getLogicM1();
           for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {
                  jLabelBadGround.add(uiMatrix[i][j],null);
-                 if(antObject.getLogicM1()[i][j] == -1)
+                 if(logicM1[i][j] == -1){
+                     jLabelBadGround.setVisible(false);
+                     jLabelBadGround.setVisible(true);
                       return;
+                 }
+                     
             }
         }
     } 

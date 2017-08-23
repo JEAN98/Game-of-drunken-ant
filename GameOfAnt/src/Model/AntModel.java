@@ -37,7 +37,7 @@ public class AntModel implements AntOperations{
     private boolean winner;
     private boolean loser;
 
-    public AntModel(JLabel[][] uiMatrix,int [][] logicM1) {
+    public AntModel(JLabel[][] uiMatrix,int [][] logicM1,boolean status) {
       this.logicM1 = logicM1;
       this.uiMatrix = uiMatrix;
       this.life = 100;
@@ -48,7 +48,8 @@ public class AntModel implements AntOperations{
       this.stepsbyAnt = 0;
       this.sugarLevel = 0;
       this.loser = false;
-      saveInformationTXT();
+      if(status)
+        saveInformationTXT();
     }
 
     public boolean getLoser() {
@@ -174,13 +175,10 @@ public class AntModel implements AntOperations{
                     alcoholismLevel -=  10; //Reduce the alcoholismLevel thanks for the ant find sugar
                 }
             }
-          
-
             return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/sugar.png"));
         }
         if(logicM1[i][k] == 10)
-        {
-            
+        {  
             //The ant found sugar with alchol
 
             if(possion > 0 && possion < 4){
@@ -233,8 +231,8 @@ public class AntModel implements AntOperations{
     private void updateMatrix(int currentI, int currentK, int i, int k, ImageIcon icon) {
         //Here we can update logic matrix and fisical matrix
         logicM1[currentI][currentK] = -1;
-        logicM1[i][k] = 0;
-        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
+        logicM1[i][k] = 105;//That means that ant passed for this cell
+        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
         stepsbyAnt++;
 
         if (icon != null) {
@@ -263,7 +261,7 @@ public class AntModel implements AntOperations{
                         if (i == logicM1.length - 1 && k + 1 == logicM1[i].length - 1) {
                             //Verify previous cell
                             updateMatrix(i, k + 1, i, k, null);
-                            winner = true;
+                             winner = true;
                              passPosition = "left";
                             return uiMatrix;
                         } else {
@@ -393,7 +391,7 @@ public class AntModel implements AntOperations{
                     //Verify is the end postion
                     if (i + 1 == logicM1.length - 1 && k == logicM1[i].length - 1) {
                             updateMatrix(i+1, k, i, k, null);
-                            JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
+                      //      JOptionPane.showMessageDialog(null, "Very good", "Winner", JOptionPane.INFORMATION_MESSAGE);
                             winner = true;
                             passPosition = "up";
                             return uiMatrix;
