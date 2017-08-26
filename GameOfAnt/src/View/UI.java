@@ -16,6 +16,7 @@ import java.awt.Label;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import java.applet.AudioClip;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -47,10 +48,10 @@ public class UI extends javax.swing.JFrame {
     int sugarCont = 0;
     int sugarWineCont = 0;
     int possionContn = 0;
-    ArrayList<Integer> randomRows;
+  
     
     public UI(GameSettingsModel model) throws IOException {
-        this.randomRows = new ArrayList();
+        
         initComponents();
         logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
@@ -59,6 +60,7 @@ public class UI extends javax.swing.JFrame {
         jLabelx.setVisible(true);
         jLabelLife1.setText(String.valueOf(antObject.getLife()));
         jLabel7.setText(gameSettings.getNickName());
+        soundStart();
     }   JLabel fin = new JLabel();
 
  
@@ -185,8 +187,10 @@ public class UI extends javax.swing.JFrame {
                soundEvent();
            
            if(antObject.getWinner()){
-               JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
-               fin.setVisible(true);
+               soundWinner();
+                fin.setVisible(true);
+               JOptionPane.showMessageDialog(null, "You are the winner!", "Very good", JOptionPane.INFORMATION_MESSAGE);
+                             
                try {
                    showMessage();
                } catch (IOException ex) {
@@ -211,9 +215,11 @@ public class UI extends javax.swing.JFrame {
                soundEvent();
            
            if(antObject.getWinner()){
+              soundWinner();
+              fin.setVisible(true);
               JOptionPane.showMessageDialog(null, "Very good", "you are the winner", JOptionPane.INFORMATION_MESSAGE);
             //moveDown();//key down pressed
-            fin.setVisible(true);
+                      
                try {
                    showMessage();
                } catch (IOException ex) {
@@ -228,17 +234,25 @@ public class UI extends javax.swing.JFrame {
                soundEvent();
            // moveUp(); //key up pressed
        }
-       if(antObject.getLoser()){
-           jLabel7.setText("Game over");
-           return;
-       }
+      
        jLabel5.setText(String.valueOf(antObject.getStepsbyAnt()));
        showMovement();
+       
+        if (antObject.getLoser()) {
+           
+            jLabel7.setForeground(Color.red);
+            jLabel7.setText("Game over");
+            try {
+                showMessage();
+            } catch (IOException ex) {
+                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_formKeyPressed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         try {
-            Settings x = new Settings();
+            Settings x = new Settings(false);
             x.setVisible(true);
             x.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             x.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -267,14 +281,19 @@ public class UI extends javax.swing.JFrame {
 
             antCreation(); // here we can play with new game
             showMatrix(gameModel.getUiMatrix());
-          
-            
-            creationMatrixByModel();
-        
-        } else{
             this.hide();
-            Settings x = new Settings();
+            creationMatrixByModel();
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            Settings x = new Settings(true); //update jframe
+            antObject.saveInformationTXT();
+   
+        } else{
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.hide();
+            Settings x = new Settings(false);
             x.setVisible(true);
+            x.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            x.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         }
     }
     private void jLabelxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelxMouseClicked
@@ -285,6 +304,20 @@ public class UI extends javax.swing.JFrame {
   }
    private void showGarden(){
        ImageIcon fond = new ImageIcon(new ImageIcon(getClass().getResource("/gameofant/Images/GARDEN.jpg")).getImage());
+   }
+   private void soundWinner(){
+     //Here can to display of sound Winner
+      AudioClip sound;
+      //we must to search the sound inside the package
+      sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/SoundWinner.wav"));
+      sound.play();
+   }
+    private void soundStart(){
+     //Here can to display of sound Winner
+      AudioClip sound;
+      //we must to search the sound inside the package
+      sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/StartSound.wav"));
+      sound.play();
    }
 
    private void soundEvent(){
@@ -304,19 +337,15 @@ public class UI extends javax.swing.JFrame {
         if (gameSettings.getAntInformation()){
             showMatrix(GameOfAnt.gameObject.getUiMatrix());
         }
-           
         else {
             antCreation(); // here we can play with new game
             showMatrix(gameModel.getUiMatrix());
         }
-          
     } 
-    
-      
+          
     private void antCreation(){
         //Creation of Ant with uiMatrix and  logicm1
         GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1(),false);
-        
     }
     private void showMatrix(JLabel[][] matrixGraphic)
     {
@@ -325,10 +354,18 @@ public class UI extends javax.swing.JFrame {
         int x=45;//Large
         int y = 50; //width
         uiMatrix = matrixGraphic;
-      //  logicM1 = gameModel.getLogicM1();
+        logicM1 = antObject.getLogicM1();
         for (int i = 0; i < uiMatrix.length; i++) {
             for (int j = 0; j < uiMatrix[i].length; j++) {
                  x+=45;
+                  if (logicM1[i][j] == -1) {
+                       //show ant in the current cell
+                       uiMatrix[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));      
+                     //   jLabelBadGround.add(uiMatrix[i][j],null);
+                        jLabelBadGround.setVisible(false);
+                        jLabelBadGround.setVisible(true);
+                     
+                   } 
                  if (i == uiMatrix.length - 1 && j == uiMatrix[i].length - 1) {
                      //Here we are going to create the house of ant
                        fin.setBounds(x,y,45+52,50+19);
@@ -359,8 +396,7 @@ public class UI extends javax.swing.JFrame {
                      jLabelBadGround.setVisible(false);
                      jLabelBadGround.setVisible(true);
                       return;
-                 }
-                     
+                 }       
             }
         }
     } 

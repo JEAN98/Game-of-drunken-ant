@@ -21,7 +21,7 @@ public class GameOfAnt {
     public static void main(String[] args) throws IOException {
         //
     
-        Settings settings = new Settings();
+        Settings settings = new Settings(false);
         
         settings.setVisible(true);
         settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

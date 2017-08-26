@@ -155,7 +155,7 @@ public class AntModel implements AntOperations{
     
     private ImageIcon verifyObstacles(int i, int k) {
       //Here we can verify if the current cell have something
-                         
+                 
       //Verify the status of possion
        if(possion == 3 )
             possion = 0;
@@ -183,6 +183,7 @@ public class AntModel implements AntOperations{
 
             if(possion > 0 && possion < 4){
                JOptionPane.showMessageDialog(null, "Sorry!", "The ant is dead for alcholism Level and possion!", JOptionPane.INFORMATION_MESSAGE);
+               this.loser = true;
             }
             if(alcoholismLevel == 0){
                  alcoholismLevel += 20; //Increase alcholism level
@@ -191,6 +192,7 @@ public class AntModel implements AntOperations{
             else if(alcoholismLevel > 0 ){
                    alcoholismLevel += 20;//Increase alcholism level
                    life -= 20;
+                   logicM1[i][k] = 0;
                    uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
                    //Show the image with sugar
                    Hip();
@@ -208,7 +210,7 @@ public class AntModel implements AntOperations{
          //   alcoholismLevel=20;
             if(possion > 0 ){
                  JOptionPane.showMessageDialog(null, "Game over!", "The ant is dead for two possions!", JOptionPane.INFORMATION_MESSAGE);
-                 
+                 this.loser = true;
             }
             else if(alcoholismLevel > 0){
                 life -= 50; 
@@ -481,7 +483,7 @@ public class AntModel implements AntOperations{
       information += String.valueOf(stepsbyAnt) +" ";
       write1.write(information);
   }
-  private void saveInformationTXT(){
+  public void saveInformationTXT(){
         try {
           //Call the file
           String dir = "C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt";

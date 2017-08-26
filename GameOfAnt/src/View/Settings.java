@@ -23,12 +23,13 @@ public class Settings extends javax.swing.JFrame {
     String fileInformation="";
     String currentFile="" ;
     int contInformation = 0;
-    public Settings() throws IOException {
+    public Settings(Boolean bus) throws IOException {
         initComponents();
         findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
         getGameInformation();
         showAntAttributes();
-       
+       if(bus)
+           showUI(false);
     }
 
     private boolean verifyText() {
@@ -638,29 +639,40 @@ public class Settings extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(481, 481, 481)
                 .addComponent(jLabel2)
-                .addGap(39, 39, 39)
+                .addGap(38, 38, 38)
                 .addComponent(jLabelCurrentLife1)
-                .addContainerGap(1326, Short.MAX_VALUE))
+                .addContainerGap(1327, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelCurrentLife1))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelCurrentLife1)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 2237, 58);
+        jPanel1.setBounds(0, 0, 2237, 63);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (verifyText()) {
+            String dir = "C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Current.txt";
+            File file = new File(dir);
+
+            //Object about buffer
+            BufferedWriter bw;
+            try {
+                bw = new BufferedWriter(new FileWriter(file));
+                bw.write("");
+            } catch (IOException ex) {
+                Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             createGame(jComboBox2.getSelectedItem().toString(), jComboBox1.getSelectedItem().toString(), jTextFieldNickNma.getText(), jTextFieldObstacles.getText());
             try {
                 getGameInformation();
@@ -683,20 +695,20 @@ public class Settings extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
         
-    private void showCurrentInformation(){
+    private void showUI(boolean  bus) throws IOException{
         
-    }
-    
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            //Here we can to coninue our game,because the information is saved in the Settings file
-         
-            model1.setGetAntInformation(true);
+            model1.setGetAntInformation(bus);
             UI newView = new UI(model1); //13 * 18 maximun
             newView.setVisible(true);
             newView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             newView.setExtendedState(JFrame.MAXIMIZED_BOTH);
             this.hide();
+    }
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            //Here we can to coninue our game,because the information is saved in the Settings file
+             showUI(true);
         } catch (IOException ex) {
             Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -735,7 +747,7 @@ public class Settings extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new Settings().setVisible(true);
+                    new Settings(false).setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
                 }
