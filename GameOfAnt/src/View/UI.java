@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -236,6 +237,7 @@ public class UI extends javax.swing.JFrame {
        }
       
        jLabel5.setText(String.valueOf(antObject.getStepsbyAnt()));
+       jLabelLife1.setText(String.valueOf(antObject.getLife()));
        showMovement();
        
         if (antObject.getLoser()) {
@@ -248,6 +250,7 @@ public class UI extends javax.swing.JFrame {
                 Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        jLabelLife1.setText(String.valueOf(antObject.getLife()));
     }//GEN-LAST:event_formKeyPressed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
@@ -336,6 +339,7 @@ public class UI extends javax.swing.JFrame {
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
         if (gameSettings.getAntInformation()){
             showMatrix(GameOfAnt.gameObject.getUiMatrix());
+          
         }
         else {
             antCreation(); // here we can play with new game
@@ -347,6 +351,7 @@ public class UI extends javax.swing.JFrame {
         //Creation of Ant with uiMatrix and  logicm1
         GameOfAnt.antObject = new AntModel(gameModel.getUiMatrix(), gameModel.getLogicM1(),false);
     }
+
     private void showMatrix(JLabel[][] matrixGraphic)
     {
        //Here we are going to show the matrix that we created in the class

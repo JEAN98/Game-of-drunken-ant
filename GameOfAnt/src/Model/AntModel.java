@@ -188,6 +188,11 @@ public class AntModel implements AntOperations{
             if(alcoholismLevel == 0){
                  alcoholismLevel += 20; //Increase alcholism level
                  life -= 10; 
+                if (alcoholismLevel >= 50) {
+                    JOptionPane.showMessageDialog(null, "Game over!", "The ant is dead for alcholism Level!", JOptionPane.INFORMATION_MESSAGE);
+                    this.loser = true;
+                    //StopGame
+                }
             }
             else if(alcoholismLevel > 0 ){
                    alcoholismLevel += 20;//Increase alcholism level
@@ -195,6 +200,11 @@ public class AntModel implements AntOperations{
                    logicM1[i][k] = 0;
                    uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
                    //Show the image with sugar
+                   if (alcoholismLevel >= 50) {
+                        JOptionPane.showMessageDialog(null, "Game over!", "The ant is dead for alcholism Level!", JOptionPane.INFORMATION_MESSAGE);
+                        this.loser = true;
+                        //StopGame
+                    }
                    Hip();
             }
             if(alcoholismLevel >= 50){
@@ -217,7 +227,6 @@ public class AntModel implements AntOperations{
                 possion = 1; //Activation according to possion
                 return new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/possion.png"));
             }
-            
         }
        return null;
     }
@@ -270,7 +279,7 @@ public class AntModel implements AntOperations{
                             if (i != passRow || k + 1 != passColumn) {
                                 ImageIcon icon = verifyObstacles(i, k + 1);
                                 if (icon != null) {
-                                    JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
+                                  //  JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
                                     updateMatrix(i, k + 1, i, k, icon);
                                     passPosition = "left";
                                     return uiMatrix;
@@ -289,7 +298,10 @@ public class AntModel implements AntOperations{
                             }
                         }
                     } else {
+                        
                         sound = true;
+                        if(sugarLevel > 0)
+                            Hip();
                         return uiMatrix;
                     }
                 }
@@ -312,7 +324,7 @@ public class AntModel implements AntOperations{
                         if (passRow != i || k - 1 != passColumn) {
                            ImageIcon icon = verifyObstacles(i, k-1);
                             if ( icon != null) {
-                                JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
+                             //   JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
                                 updateMatrix(i, k-1, i, k, icon);
                                  passPosition = "rigth";
                                 return uiMatrix;
@@ -334,6 +346,8 @@ public class AntModel implements AntOperations{
                     } //Can't move
                     else {
                         sound = true;
+                         if(sugarLevel > 0)
+                            Hip();
                         return uiMatrix;
                     }
                 }
@@ -355,7 +369,7 @@ public class AntModel implements AntOperations{
                             ImageIcon icon = verifyObstacles(i-1, k);
                             if (icon != null) {
                                 updateMatrix(i - 1, k, i, k, icon);
-                                JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
+                             //   JOptionPane.showMessageDialog(null, "Bad OR GOOD", "SomeThing", JOptionPane.INFORMATION_MESSAGE);
                                  passPosition = "down";
                                 return uiMatrix;
                                 
@@ -375,6 +389,8 @@ public class AntModel implements AntOperations{
                     } //Can't move up, for this we are going to show a message
                     else {
                         sound = true;
+                          if(sugarLevel > 0)
+                            Hip();
                         return uiMatrix;
                     }
                 }
@@ -425,6 +441,8 @@ public class AntModel implements AntOperations{
                         else {
                             winner = false;
                             sound = true;
+                              if(sugarLevel > 0)
+                                  Hip();
                             return uiMatrix;
                         }
                     }
