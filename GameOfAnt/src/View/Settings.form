@@ -602,7 +602,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="38" green="9f" red="68" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Sugar Level"/>
+                <Property name="text" type="java.lang.String" value="High Score"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelAlcholismLevel">

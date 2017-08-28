@@ -25,7 +25,7 @@ public class AntModel implements AntOperations{
     //private GameSettingsModel gameSettings;
     private int life;
     private int alcoholismLevel;
-    private int sugarLevel;
+    private boolean activeHip;
     private int currentRow;
     private int currentColumn;
     private int passRow;
@@ -45,8 +45,7 @@ public class AntModel implements AntOperations{
       currentColumn = 0;
       this.alcoholismLevel = 0;
       this.possion = 0;
-      this.stepsbyAnt = 0;
-      this.sugarLevel = 0;
+      this.stepsbyAnt = 0;      
       this.loser = false;
       if(status)
         saveInformationTXT();
@@ -121,14 +120,6 @@ public class AntModel implements AntOperations{
         this.alcoholismLevel = alcoholismLevel;
     }
 
-    public int getSugarLevel() {
-        return sugarLevel;
-    }
-
-    public void setSugarLevel(int sugarLevel) {
-        this.sugarLevel = sugarLevel;
-    }
-
     public int getStepsbyAnt() {
         return stepsbyAnt;
     }
@@ -152,7 +143,7 @@ public class AntModel implements AntOperations{
     public void setLogicM1(int[][] logicM1) {
         this.logicM1 = logicM1;
     }
-    
+  
     private ImageIcon verifyObstacles(int i, int k) {
       //Here we can verify if the current cell have something
                  
@@ -161,7 +152,8 @@ public class AntModel implements AntOperations{
             possion = 0;
        if(possion > 0)
             possion ++;
-      
+       
+      activeHip = false;
       
       if(logicM1[i][k] == 5){
           // The ant found sugar
@@ -205,7 +197,8 @@ public class AntModel implements AntOperations{
                         this.loser = true;
                         //StopGame
                     }
-                   Hip();
+                   activeHip = true;
+                
             }
             if(alcoholismLevel >= 50){
                 JOptionPane.showMessageDialog(null, "Game over!", "The ant is dead for alcholism Level!", JOptionPane.INFORMATION_MESSAGE);
@@ -257,7 +250,8 @@ public class AntModel implements AntOperations{
         passRow = i; //save the previous row 
         passColumn = k; //save  previous column
         saveInformationTXT();
-
+        if(activeHip)
+            Hip();
     }
 
     @Override
@@ -298,10 +292,10 @@ public class AntModel implements AntOperations{
                             }
                         }
                     } else {
-                        
+                        Hip();
                         sound = true;
-                        if(sugarLevel > 0)
-                            Hip();
+//                        if(sugarLevel > 0)
+//                             activeHip();
                         return uiMatrix;
                     }
                 }
@@ -346,8 +340,8 @@ public class AntModel implements AntOperations{
                     } //Can't move
                     else {
                         sound = true;
-                         if(sugarLevel > 0)
-                            Hip();
+                         if(alcoholismLevel > 0)
+                             Hip();
                         return uiMatrix;
                     }
                 }
@@ -389,8 +383,8 @@ public class AntModel implements AntOperations{
                     } //Can't move up, for this we are going to show a message
                     else {
                         sound = true;
-                          if(sugarLevel > 0)
-                            Hip();
+                          if(alcoholismLevel > 0)
+                              Hip();
                         return uiMatrix;
                     }
                 }
@@ -441,7 +435,7 @@ public class AntModel implements AntOperations{
                         else {
                             winner = false;
                             sound = true;
-                              if(sugarLevel > 0)
+                              if(alcoholismLevel > 0)
                                   Hip();
                             return uiMatrix;
                         }
@@ -463,25 +457,28 @@ public class AntModel implements AntOperations{
             result = (int) (Math.random() * 4) + 1;
 
             if (result == 1 && passPosition != "down") {
-                //Verify if we can moveUp
-                if (currentRow - 1 >= 0) {
-                    MoveUp();
+                //Verify if we can move down
+                if (currentRow + 1 <  logicM1.length) {
+                    MoveDown();
                     return;
                 }
             } 
             else if (result == 2 && passPosition != "up") {
-                   if(currentRow +1 < logicM1.length){
-                       MoveDown();
+                //Verify if we can move up
+                   if(currentRow - 1 >= 0){
+                       MoveUp();
                        return;
                    }
             }
             else if(result == 3 && passPosition != "left"){
-               if(currentColumn -1 > 0 ){
+                //Verify if we can move left
+               if(currentColumn -1 >= 0 ){
                    MoveLeft();
                    return;
                }
             }
             else if(result == 4 && passPosition != "rigth"){
+                //Verify if we can move rigth
                 if(currentColumn + 1 <  GameOfAnt.model1.getWidth()){
                     MoveRight();
                     return;
@@ -495,7 +492,6 @@ public class AntModel implements AntOperations{
       
       String information="";
       information += String.valueOf(life) +" ";
-      information += String.valueOf(sugarLevel) +" ";
       information += String.valueOf(alcoholismLevel) +" ";
       information += String.valueOf(possion) +" ";
       information += String.valueOf(stepsbyAnt) +" ";

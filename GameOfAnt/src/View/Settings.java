@@ -26,11 +26,14 @@ public class Settings extends javax.swing.JFrame {
     public Settings(Boolean bus) throws IOException {
         initComponents();
         findInformation("C:\\Users\\JeanCarlo\\Documents\\GitHub\\Game-of-drunken-ant\\Settings.txt");
-        getGameInformation();
-        showAntAttributes();
-       if(bus)
-           showUI(false);
-    }
+        if(getGameInformation()){
+            showAntAttributes();
+            if (bus) {
+                showUI(false);
+            }
+        }
+        }
+        
 
     private boolean verifyText() {
         if (jTextFieldNickNma.getText().equals("") || jTextFieldObstacles.getText().equals("")) {
@@ -82,53 +85,64 @@ public class Settings extends javax.swing.JFrame {
     
 
     private boolean getGameInformation() throws IOException {
-       boolean bus = false;
-        String result = "";
-        int cont = 0;
-        //Find the quantity of rows
-        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-            result += String.valueOf(fileInformation.charAt(cont));
-            cont++;
-            bus= true;
-        }
-        int rows = Integer.parseInt(result);
-        cont++;
-        result = ""; //Reset the variable
+        try{
+            
+            boolean bus = false;
+            String result = "";
+            int cont = 0;
+            //Find the quantity of rows
+            if (!fileInformation.equals("")) {
 
-        //Find the quantity of columns
-        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-            result += String.valueOf(fileInformation.charAt(cont));
-            cont++;
-        }
-        int columns = Integer.parseInt(result);
-        cont++;
-        result = ""; //Reset the variable
+                while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                    result += String.valueOf(fileInformation.charAt(cont));
+                    cont++;
+                    bus = true;
+                }
+                int rows = Integer.parseInt(result);
+                cont++;
+                result = ""; //Reset the variable
 
-        //Find the nickName
-        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-            result += String.valueOf(fileInformation.charAt(cont));
-            cont++;
-        }
-        String nickName = result;
-        cont++;
-        result = ""; //Reset the variable
+                //Find the quantity of columns
+                while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                    result += String.valueOf(fileInformation.charAt(cont));
+                    cont++;
+                }
+                int columns = Integer.parseInt(result);
+                cont++;
+                result = ""; //Reset the variable
 
-        //Find the quantity of obstacles
-        while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
-            result += String.valueOf(fileInformation.charAt(cont));
-            if (cont + 1 == fileInformation.length()) {
-                break;
+                //Find the nickName
+                while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                    result += String.valueOf(fileInformation.charAt(cont));
+                    cont++;
+                }
+                String nickName = result;
+                cont++;
+                result = ""; //Reset the variable
+
+                //Find the quantity of obstacles
+                while (!String.valueOf(fileInformation.charAt(cont)).equals(" ")) {
+                    result += String.valueOf(fileInformation.charAt(cont));
+                    if (cont + 1 == fileInformation.length()) {
+                        break;
+                    }
+                    cont++;
+                }
+                int obstaclesQuantity = Integer.parseInt(result);
+
+                model1 = new GameSettingsModel(nickName, rows, columns, obstaclesQuantity);
+                gameObject = new GameModel(rows, columns);
+                gameObject.setUiMatrix();
+                gameObject.setLogicM1(obstaclesQuantity);
+                getInformationTXT();
+                return bus;
             }
-            cont++;
+            else
+                return false;
         }
-        int obstaclesQuantity = Integer.parseInt(result);
-        
-        model1 = new GameSettingsModel(nickName, rows, columns, obstaclesQuantity);
-        gameObject = new GameModel(rows, columns);
-        gameObject.setUiMatrix();
-        gameObject.setLogicM1(obstaclesQuantity);
-        getInformationTXT();
-        return bus;
+        catch(Exception ex){
+            return false;
+        }
     }
     
     private void getInformationTXT()throws FileNotFoundException, IOException {
@@ -186,10 +200,7 @@ public class Settings extends javax.swing.JFrame {
      
          //life Found it
          GameOfAnt.antObject.setLife(Integer.parseInt(getAntAttributes()));
-        
-        //Sugar found it
-        GameOfAnt.antObject.setSugarLevel(Integer.parseInt(getAntAttributes()));
-        
+              
        //Alcholism found it
         GameOfAnt.antObject.setAlcoholismLevel(Integer.parseInt(getAntAttributes()));
         
@@ -232,7 +243,7 @@ public class Settings extends javax.swing.JFrame {
      
     private void showAntAttributes(){
         jLabelCurrentLife.setText(String.valueOf(GameOfAnt.antObject.getLife()));
-        jLabelSuarLevel.setText(String.valueOf(GameOfAnt.antObject.getSugarLevel()));
+ //     jLabelSuarLevel.setText(String.valueOf(GameOfAnt.antObject.getSugarLevel()));
         jLabelAlcholismLevel.setText(String.valueOf(GameOfAnt.antObject.getAlcoholismLevel()));
         jLabelPossion.setText(String.valueOf(GameOfAnt.antObject.getPossion()));
         jLabelSteps.setText(String.valueOf(GameOfAnt.antObject.getStepsbyAnt()));
@@ -470,7 +481,7 @@ public class Settings extends javax.swing.JFrame {
 
         jLabel17.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(104, 159, 56));
-        jLabel17.setText("Sugar Level");
+        jLabel17.setText("High Score");
 
         jLabelAlcholismLevel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabelAlcholismLevel.setText("jLabel15");
