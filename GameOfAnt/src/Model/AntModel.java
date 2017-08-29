@@ -504,6 +504,9 @@ public class AntModel implements AntOperations{
       information += String.valueOf(alcoholismLevel) +" ";
       information += String.valueOf(possion) +" ";
       information += String.valueOf(stepsbyAnt) +" ";
+      information += passPosition +" ";
+      information += passRow +" ";
+      information += passColumn + " ";
       write1.write(information);
   }
   public void saveInformationTXT(){

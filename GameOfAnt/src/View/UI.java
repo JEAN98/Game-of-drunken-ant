@@ -64,9 +64,16 @@ public class UI extends javax.swing.JFrame {
         jLabelx.setVisible(true);
         jLabelLife1.setText(String.valueOf(antObject.getLife()));
         jLabel7.setText(gameSettings.getNickName());
+        showStatus();
         soundStart();
     }   JLabel fin = new JLabel();
-
+    
+    private void showStatus() throws IOException{
+        //Here we can verify if game was end
+        if(logicM1[(gameSettings.getLarge()-1)][(gameSettings.getWidth() -1)] == -1){
+            showMessage();
+        }
+    }
  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -295,9 +302,9 @@ public class UI extends javax.swing.JFrame {
 
             antCreation(); // here we can play with new game
             showMatrix(gameModel.getUiMatrix());
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.hide();
             creationMatrixByModel();
-            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             Settings x = new Settings(true); //update jframe
             antObject.saveInformationTXT();
    

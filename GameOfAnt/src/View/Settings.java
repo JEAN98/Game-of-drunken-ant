@@ -209,6 +209,15 @@ public class Settings extends javax.swing.JFrame {
         
        //Steps found it
         GameOfAnt.antObject.setStepsbyAnt(Integer.parseInt(getAntAttributes()));
+        
+         //Pass position found it
+        GameOfAnt.antObject.setPassPosition(getAntAttributes());
+        
+          //Pass row found it
+        GameOfAnt.antObject.setPassRow(Integer.parseInt(getAntAttributes()));
+        
+       //Pass column found it
+        GameOfAnt.antObject.setPassColumn(Integer.parseInt(getAntAttributes()));
     }
      private int setCurrentsPositions(String fileInformation,int cont){
         //Here we can send the information about the current possitions 
