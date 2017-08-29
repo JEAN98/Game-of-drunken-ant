@@ -54,9 +54,12 @@ public class UI extends javax.swing.JFrame {
     public UI(GameSettingsModel model) throws IOException {
         
         initComponents();
+        //Creation of logic matriz
         logicM1 = new int[model.getLarge()][model.getWidth()];
         gameSettings = model;
+        //Creation of view according of user instrucctions
         creationMatrixByModel();
+        //Show information the current  Ant
         showInformationAboutAnt();
         jLabelx.setVisible(true);
         jLabelLife1.setText(String.valueOf(antObject.getLife()));
@@ -235,13 +238,23 @@ public class UI extends javax.swing.JFrame {
                soundEvent();
            // moveUp(); //key up pressed
        }
-      
+        activeLoser();
+        if(antObject.isActiveHip())
+            jLabeHip.setText("Active");
+        else
+            jLabeHip.setText("Desactive");
+        
        jLabel5.setText(String.valueOf(antObject.getStepsbyAnt()));
        jLabelLife1.setText(String.valueOf(antObject.getLife()));
        showMovement();
        
-        if (antObject.getLoser()) {
-           
+      
+        jLabelLife1.setText(String.valueOf(antObject.getLife()));
+    }//GEN-LAST:event_formKeyPressed
+    private void activeLoser(){
+        //Here we can display the message in the case the user Lose the game 
+          if (antObject.getLoser() || antObject.getLife() <= 0) {
+            soundLoser();
             jLabel7.setForeground(Color.red);
             jLabel7.setText("Game over");
             try {
@@ -250,9 +263,7 @@ public class UI extends javax.swing.JFrame {
                 Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        jLabelLife1.setText(String.valueOf(antObject.getLife()));
-    }//GEN-LAST:event_formKeyPressed
-
+    }
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         try {
             Settings x = new Settings(false);
@@ -327,9 +338,17 @@ public class UI extends javax.swing.JFrame {
       //Here can to display of sound 
       AudioClip sound;
       //we must to search the sound inside the package
-      sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/Sonido_de_interrupci_n_Tuuuuuu.wav"));
+      
+       sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/Faild.wav"));
       sound.play();
     }
+   private void soundLoser(){
+        //Here can to display of sound 
+      AudioClip sound;
+      //we must to search the sound inside the package
+      sound = java.applet.Applet.newAudioClip(getClass().getResource("/gameofant/Images/RoadSound.wav"));
+      sound.play(); 
+   }
    
     private void creationMatrixByModel() throws IOException{
     //Here we are going to send the information about 

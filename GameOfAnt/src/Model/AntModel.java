@@ -63,6 +63,14 @@ public class AntModel implements AntOperations{
         this.currentRow = currentRow;
     }
 
+    public boolean isActiveHip() {
+        return activeHip;
+    }
+
+    public void setActiveHip(boolean activeHip) {
+        this.activeHip = activeHip;
+    }
+
     public int getCurrentColumn() {
         return currentColumn;
     }
@@ -279,6 +287,7 @@ public class AntModel implements AntOperations{
                                     return uiMatrix;
                                 } else {
                                     updateMatrix(i, k + 1, i, k, null);
+                                    passPosition = "left";
                                     if(alcoholismLevel > 0 ){
                                         alcoholismLevel -= 10;
                                     }
@@ -292,10 +301,10 @@ public class AntModel implements AntOperations{
                             }
                         }
                     } else {
-                        Hip();
+                        
                         sound = true;
-//                        if(sugarLevel > 0)
-//                             activeHip();
+                        if(alcoholismLevel > 0)
+                             Hip();
                         return uiMatrix;
                     }
                 }
