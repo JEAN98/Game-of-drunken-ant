@@ -64,15 +64,15 @@ public class UI extends javax.swing.JFrame {
         jLabelx.setVisible(true);
         jLabelLife1.setText(String.valueOf(antObject.getLife()));
         jLabel7.setText(gameSettings.getNickName());
-        showStatus();
+        //showStatus();
         soundStart();
     }   JLabel fin = new JLabel();
     
     private void showStatus() throws IOException{
         //Here we can verify if game was end
-        if(logicM1[(gameSettings.getLarge()-1)][(gameSettings.getWidth() -1)] == -1){
+        if(logicM1[(gameSettings.getLarge()-1)][(gameSettings.getWidth() -1)] == -1)
             showMessage();
-        }
+        
     }
  
     @SuppressWarnings("unchecked")
@@ -82,7 +82,7 @@ public class UI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabeHip = new javax.swing.JLabel();
+        jLabeAlcohol = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -117,15 +117,15 @@ public class UI extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Hip:");
+        jLabel2.setText("AlcoholLevel:");
         jPanel2.add(jLabel2);
-        jLabel2.setBounds(1000, 180, 50, 50);
+        jLabel2.setBounds(930, 180, 150, 50);
 
-        jLabeHip.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabeHip.setForeground(new java.awt.Color(255, 255, 255));
-        jLabeHip.setText("Desactive");
-        jPanel2.add(jLabeHip);
-        jLabeHip.setBounds(1090, 180, 110, 50);
+        jLabeAlcohol.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabeAlcohol.setForeground(new java.awt.Color(255, 255, 255));
+        jLabeAlcohol.setText("0");
+        jPanel2.add(jLabeAlcohol);
+        jLabeAlcohol.setBounds(1090, 180, 60, 50);
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -247,10 +247,11 @@ public class UI extends javax.swing.JFrame {
        }
         activeLoser();
         if(antObject.isActiveHip())
-            jLabeHip.setText("Active");
+            jLabeAlcohol.setText("Active");
         else
-            jLabeHip.setText("Desactive");
+            jLabeAlcohol.setText("Desactive");
         
+       jLabeAlcohol.setText(String.valueOf(antObject.getAlcoholismLevel())); 
        jLabel5.setText(String.valueOf(antObject.getStepsbyAnt()));
        jLabelLife1.setText(String.valueOf(antObject.getLife()));
        showMovement();
@@ -284,6 +285,7 @@ public class UI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jLabel1MouseClicked
     public void showMessage() throws IOException{
+        showTravel();
         JTextField topicTitle = new JTextField();
         JTextField topicDesc = new JTextField();
         Object[] message = {"Would you like to play again with the same matrix?"};
@@ -309,6 +311,7 @@ public class UI extends javax.swing.JFrame {
             antObject.saveInformationTXT();
    
         } else{
+            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.hide();
             Settings x = new Settings(false);
@@ -316,6 +319,41 @@ public class UI extends javax.swing.JFrame {
             x.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             x.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         }
+    }
+    private void showTravel(){
+        javax.swing.border.Border border = BorderFactory.createLineBorder(Color.black, 1);
+        int x=45;//Large
+        int y = 50; //width
+        uiMatrix = antObject.getUiMatrix();
+        logicM1 = antObject.getLogicM1();
+        for (int i = 0; i < uiMatrix.length; i++) {
+            for (int j = 0; j < uiMatrix[i].length; j++) {
+                 x+=45;
+                  if (logicM1[i][j] == -1) {
+                       //show ant in the current cell
+                       uiMatrix[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/FirstAnt.jpg")));      
+                     //   jLabelBadGround.add(uiMatrix[i][j],null);
+                        jLabelBadGround.setVisible(false);
+                        jLabelBadGround.setVisible(true);
+                     
+                   } 
+                 if (i == uiMatrix.length - 1 && j == uiMatrix[i].length - 1) {
+                     //Here we are going to create the house of ant
+                       fin.setBounds(x,y,45+52,50+19);
+                       fin.setBorder(border); 
+                       fin.setVisible(false);
+                       fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
+                       jLabelBadGround.add(fin,null);
+                   } 
+                 if(logicM1[i][j] == 105)
+                    uiMatrix[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
+                 jLabelBadGround.add(uiMatrix[i][j],null);
+            }
+
+            x = 45;
+            y += 50;
+        }
+
     }
     private void jLabelxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelxMouseClicked
         // TODO add your handling code here:
@@ -363,9 +401,9 @@ public class UI extends javax.swing.JFrame {
         gameModel = new GameModel(gameSettings.getLarge(),gameSettings.getWidth());
         gameModel.setUiMatrix();
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
-        if (gameSettings.getAntInformation()){
+        logicM1 = GameOfAnt.gameObject.getLogicM1();
+        if (gameSettings.getAntInformation()&& logicM1[(gameSettings.getLarge()-1)][(gameSettings.getWidth() -1)] != -1){
             showMatrix(GameOfAnt.gameObject.getUiMatrix());
-          
         }
         else {
             antCreation(); // here we can play with new game
@@ -405,8 +443,8 @@ public class UI extends javax.swing.JFrame {
                        fin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/4.jpg")));
                        jLabelBadGround.add(fin,null);
                    } 
-                 if(logicM1[i][j] == 105)
-                    uiMatrix[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
+//                 if(logicM1[i][j] == 105)
+//                    uiMatrix[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
                  jLabelBadGround.add(uiMatrix[i][j],null);
             }
 
@@ -472,7 +510,7 @@ public class UI extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabeHip;
+    private javax.swing.JLabel jLabeAlcohol;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

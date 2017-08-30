@@ -244,7 +244,8 @@ public class AntModel implements AntOperations{
         //Here we can update logic matrix and fisical matrix
         logicM1[currentI][currentK] = -1;
         logicM1[i][k] = 105;//That means that ant passed for this cell
-        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
+      //  uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/press_blue_1.png")));
+        uiMatrix[i][k].setIcon(new javax.swing.ImageIcon(getClass().getResource("/gameofant/Images/BadGround.jpg")));
         stepsbyAnt++;
 
         if (icon != null) {
