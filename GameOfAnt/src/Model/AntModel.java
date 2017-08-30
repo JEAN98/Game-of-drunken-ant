@@ -156,11 +156,12 @@ public class AntModel implements AntOperations{
       //Here we can verify if the current cell have something
                  
       //Verify the status of possion
-       if(possion == 3 )
-            possion = 0;
-       if(possion > 0)
-            possion ++;
-       
+      if(possion > 0)
+          possion++;
+      
+      if(possion == 4)
+          possion = 0;
+    
       activeHip = false;
       
       if(logicM1[i][k] == 5){
@@ -262,6 +263,15 @@ public class AntModel implements AntOperations{
         if(activeHip)
             Hip();
     }
+    private void veryPossionStatus(){
+        if(possion > 0  &&  possion  < 4){
+            possion++;
+            life -= 20;
+            Hip();
+        }
+        if(possion == 4)
+            possion = 0;
+    }
 
     @Override
     public JLabel[][] MoveRight() {
@@ -302,10 +312,11 @@ public class AntModel implements AntOperations{
                             }
                         }
                     } else {
-                        
                         sound = true;
                         if(alcoholismLevel > 0)
                              Hip();
+                        
+                         veryPossionStatus();
                         return uiMatrix;
                     }
                 }
@@ -349,9 +360,12 @@ public class AntModel implements AntOperations{
                         }
                     } //Can't move
                     else {
+                        
                         sound = true;
                          if(alcoholismLevel > 0)
                              Hip();
+                         
+                        veryPossionStatus();
                         return uiMatrix;
                     }
                 }
@@ -395,6 +409,7 @@ public class AntModel implements AntOperations{
                         sound = true;
                           if(alcoholismLevel > 0)
                               Hip();
+                          veryPossionStatus();
                         return uiMatrix;
                     }
                 }
@@ -447,6 +462,7 @@ public class AntModel implements AntOperations{
                             sound = true;
                               if(alcoholismLevel > 0)
                                   Hip();
+                              veryPossionStatus();
                             return uiMatrix;
                         }
                     }
