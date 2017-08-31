@@ -402,7 +402,7 @@ public class UI extends javax.swing.JFrame {
         gameModel.setUiMatrix();
         gameModel.setLogicM1(gameSettings.getObstacleQuantity());
         logicM1 = GameOfAnt.gameObject.getLogicM1();
-        if (gameSettings.getAntInformation()&& logicM1[(gameSettings.getLarge()-1)][(gameSettings.getWidth() -1)] != -1){
+        if (gameSettings.getAntInformation()&& logicM1[(gameSettings.getLarge()-1)][(gameSettings.getWidth() -1)] != -1 &&  !GameOfAnt.antObject.isLoser()){
             showMatrix(GameOfAnt.gameObject.getUiMatrix());
         }
         else {

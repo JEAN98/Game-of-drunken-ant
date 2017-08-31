@@ -67,6 +67,14 @@ public class AntModel implements AntOperations{
         return activeHip;
     }
 
+    public boolean isLoser() {
+        return loser;
+    }
+
+    public void setLoser(boolean loser) {
+        this.loser = loser;
+    }
+
     public void setActiveHip(boolean activeHip) {
         this.activeHip = activeHip;
     }
@@ -263,11 +271,14 @@ public class AntModel implements AntOperations{
         if(activeHip)
             Hip();
     }
+    //Here if ant schoks with edge and it's status is about possion,
+    //the ant is going to move with hip method
     private void veryPossionStatus(){
         if(possion > 0  &&  possion  < 4){
             possion++;
             life -= 20;
-            Hip();
+            activeHip = true;
+            updateMatrix(currentRow, currentRow, passRow, passColumn, null);
         }
         if(possion == 4)
             possion = 0;
@@ -524,6 +535,7 @@ public class AntModel implements AntOperations{
       information += passPosition +" ";
       information += passRow +" ";
       information += passColumn + " ";
+      information += String.valueOf(loser) +" ";
       write1.write(information);
   }
   public void saveInformationTXT(){
